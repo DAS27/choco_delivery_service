@@ -10,13 +10,9 @@ use Psr\Log\LoggerInterface;
 use SmartDelivery\Core\JobDispatcher\JobDispatcherInterface;
 use SmartDelivery\DeliveryIntegration\ChocoDostavka\UseCases\CreateOrderUseCase;
 use SmartDelivery\DeliveryIntegration\ChocoDostavka\UseCases\ProcessOrderStatusHookUseCase;
+use SmartDelivery\DeliveryIntegration\SmartDeal\Dto\CreateOrderDto;
 use SmartDelivery\HttpClients\ChocoDostavka\DTO\AddressDto;
-use SmartDelivery\HttpClients\ChocoDostavka\DTO\ContactInfoDto;
-use SmartDelivery\HttpClients\ChocoDostavka\DTO\CreateOrderDto;
-use SmartDelivery\HttpClients\ChocoDostavka\DTO\PointDto;
 use SmartDelivery\HttpClients\ChocoDostavka\DTO\ProductDto;
-use SmartDelivery\HttpClients\ChocoDostavka\DTO\TaskDto;
-use SmartDelivery\HttpClients\ChocoDostavka\Enums\TransportTypeEnum;
 use SmartDelivery\Main\Controllers\AbstractController;
 
 final class ChocoDostavkaController extends AbstractController
@@ -33,7 +29,26 @@ final class ChocoDostavkaController extends AbstractController
         $logger->info('[ChocoDostavkaController] Incoming SD order request', $request->all());
 
         $createOrderUseCase->handle(
-
+            new CreateOrderDto(
+                phone: $request->get('phone'),
+                point_a: new AddressDto(
+                    street: $request->get('points')[0]['street'],
+                    building: $request->get('points')[0]['building'],
+                ),
+                point_b: new AddressDto(
+                    street: $request->get('points')[1]['street'],
+                    building: $request->get('points')[1]['building'],
+                ),
+                products: array_map(
+                    fn($item) => new ProductDto(
+                        title: $item['title'],
+                        price: $item['price'],
+                        count: $item['count']
+                    ),
+                    $request->get('products')),
+                external_order_id: $request->get('order_id'),
+                planned_datetime: $request->get('planned_datetime')
+            )
         );
 
         return $this->sendResponse(['data' => 'Ok']);

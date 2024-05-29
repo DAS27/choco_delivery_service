@@ -14,7 +14,7 @@ use SmartDelivery\Main\Models\AbstractModel;
  * @property string $point_b
  * @property string $products
  * @property string planned_datetime
- * @property string $external_order_id
+ * @property int $external_order_id
  */
 final class SmartDealModel extends AbstractModel
 {
@@ -27,5 +27,11 @@ final class SmartDealModel extends AbstractModel
         'phone',
         'planned_datetime',
         'external_order_id',
+    ];
+
+    protected $casts = [
+        'point_a' => 'json',
+        'point_b' => 'array',
+        'products' => 'array',
     ];
 }

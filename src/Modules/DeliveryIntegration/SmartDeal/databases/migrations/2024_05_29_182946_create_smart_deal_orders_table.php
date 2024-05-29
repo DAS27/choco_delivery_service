@@ -19,7 +19,7 @@ return new class extends Migration
             $table->json('point_b');
             $table->json('products');
             $table->string('phone');
-            $table->string('planned_datetime');
+            $table->string('planned_datetime')->nullable();
             $table->integer('external_order_id');
             $table->timestamps();
         });
