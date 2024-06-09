@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SmartDelivery\Main\Controllers;
 
 use Illuminate\Contracts\Support\Arrayable;

@@ -27,10 +27,10 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "SmartDelivery\\Main\\": "src/Modules/Main/src/",
+            "SmartDelivery\\Order\\": "src/Modules/Order/src/",
             "SmartDelivery\\Core\\": "src/Core/src/",
-            "SmartDelivery\\HttpClients\\ChocoDostavka\\": "src/HttpClients/ChocoDostavka/src/",
-            "SmartDelivery\\DeliveryIntegration\\ChocoDostavka\\": "src/Modules/DeliveryIntegration/ChocoDostavka/src/",
-            "SmartDelivery\\DeliveryIntegration\\SmartDeal\\": "src/Modules/DeliveryIntegration/SmartDeal/src/"
+            "SmartDelivery\\HttpClients\\Raketa\\": "src/HttpClients/Raketa/src/",
+            "SmartDelivery\\DeliveryService\\Raketa\\": "src/Modules/DeliveryService/Raketa/src/"
         }
     },
     "autoload-dev": {

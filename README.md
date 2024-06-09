@@ -1,6 +1,6 @@
 # Smart-Delivery Backend
 
-This repository contains the delivery service code for the website https://smartdeal.kz/, written in Laravel.
+This repository contains the delivery service code for the website https://Order.kz/, written in Laravel.
 
 ## About
 

@@ -8,8 +8,8 @@ return [
     \SmartDelivery\Core\EventDispatcher\Providers\EventDispatcherServiceProvider::class,
 
     //Modules
-//    \SmartDelivery\HttpClients\ChocoDostavka\Providers\ChocoDostavkaHttpServiceProvider::class,
-    \SmartDelivery\DeliveryIntegration\ChocoDostavka\Providers\ChocoDostavkaServiceProvider::class,
-    \SmartDelivery\DeliveryIntegration\SmartDeal\Providers\SmartDealServiceProvider::class
+    \SmartDelivery\HttpClients\Raketa\Providers\RaketaHttpServiceProvider::class,
+    \SmartDelivery\DeliveryService\Raketa\Providers\RaketaServiceProvider::class,
+    \SmartDelivery\Order\Providers\OrderServiceProvider::class,
 ];
 

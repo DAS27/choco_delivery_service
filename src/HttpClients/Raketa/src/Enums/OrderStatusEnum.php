@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SmartDelivery\HttpClients\Raketa\Enums;
+
+enum OrderStatusEnum: string
+{
+    case CREATED = 'CREATED';
+    CASE ASSIGNED = 'ASSIGNED';
+    CASE SHOULD_BE_REASSIGNED = 'SHOULD_BE_REASSIGNED';
+    CASE SHOULD_BE_ASSIGNED = 'SHOULD_BE_ASSIGNED';
+    CASE ACCEPTED = 'ACCEPTED';
+    CASE AWAITED_IN_RESTAURANT = 'AWAITED_IN_RESTAURANT';
+    CASE PICKED_UP = 'PICKED_UP';
+    CASE ARRIVED_TO_CLIENT = 'ARRIVED_TO_CLIENT';
+    CASE DELIVERED = 'DELIVERED';
+    case CANCELED = 'CANCELED';
+    case COMPLETED = 'COMPLETED';
+}

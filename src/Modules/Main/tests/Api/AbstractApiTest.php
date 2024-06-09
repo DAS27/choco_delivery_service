@@ -6,8 +6,7 @@ namespace SmartDelivery\Main\Tests\Api;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
-use SmartDelivery\User\Database\Factories\UserFactory;
-use SmartDelivery\User\Models\UserModel;
+
 
 class AbstractApiTest extends TestCase
 {
@@ -15,8 +14,5 @@ class AbstractApiTest extends TestCase
 
     protected function createUserAndToken(): string
     {
-        /** @var UserModel $user */
-        $user = UserFactory::new()->create();
-        return $user->createToken('Production token')->plainTextToken;
     }
 }
