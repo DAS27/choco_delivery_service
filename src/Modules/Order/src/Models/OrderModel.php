@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace SmartDelivery\Order\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use SmartDelivery\DeliveryService\Main\Enums\DeliveryServiceEnum;
 use SmartDelivery\Main\Models\AbstractStringableModel;
 use SmartDelivery\Order\Enums\OrderStatusEnum;
-use SmartDelivery\DeliveryService\Main\Models\DeliveryServiceModel;
-use SmartDelivery\Product\Models\ProductModel;
 
 /**
  * @property string $id

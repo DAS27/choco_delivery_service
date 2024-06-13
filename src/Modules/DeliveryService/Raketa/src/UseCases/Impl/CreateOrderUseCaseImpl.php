@@ -25,7 +25,6 @@ final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
     {
         $this->databaseManager->beginTransaction();
 
-        /** @var OrderProcessStrategy $strategy */
         $strategy = null;
         if ($dto->order_planned_at === null) {
             $strategy = app()->make(CreateOrderProcessStrategy::class);
@@ -34,6 +33,7 @@ final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
         }
 
         try {
+            /** @var OrderProcessStrategy $strategy */
             $strategy->handle($dto);
         } catch (Throwable $e) {
             $this->logger->critical('[CardHoldBalanceProcessUseCase]', [
@@ -43,7 +43,7 @@ final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
 
             $this->databaseManager->rollBack();
 
-            throw new CantOrderProcessStrategy($e->getMessage(), $e->getCode(), $e);
+            throw new CantOrderProcessStrategy($e->getMessage(), (int) $e->getCode(), $e);
         }
 
         $this->databaseManager->commit();

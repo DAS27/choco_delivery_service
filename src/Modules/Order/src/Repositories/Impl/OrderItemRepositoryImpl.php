@@ -17,7 +17,7 @@ final class OrderItemRepositoryImpl implements OrderItemRepository
         $model->id = Uuid::uuid4()->toString();
         $model->order_id = $dto->order_id;
         $model->warehouse_order_id = $dto->warehouse_order_id;
-        $model->pickup_address = $dto->address;
+        $model->pickup_address = $dto->address->toArray();
         $model->title = $dto->title;
         $model->quantity = $dto->quantity;
         $model->price = $dto->price;

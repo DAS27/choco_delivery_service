@@ -10,6 +10,7 @@ final class RequestOrderDto extends Data
 {
     public function __construct(
         public int $order_id,
+        public int $merchant_id,
         public int $warehouse_order_id,
         public string $phone,
         public array $address,

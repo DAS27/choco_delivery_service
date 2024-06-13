@@ -28,7 +28,6 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
                 new CreateOrderDto(
                     transportType: TransportTypeEnum::CAR,
                     points: array_map(function (array $point) use ($externalOrderDto) {
-                        dd($point);
                         return new PointDto(
                             phone_number: $externalOrderDto->phone,
                             address: new AddressDto(

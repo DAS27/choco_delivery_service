@@ -28,6 +28,7 @@ final class OrderController extends AbstractController
 
         $createOrderUseCase->handle(new RequestOrderDto(
             order_id: $request->get('order_id'),
+            merchant_id: $request->get('merchant_id'),
             warehouse_order_id: $request->get('all_style_order_id'),
             phone: $request->get('phone'),
             address: $request->get('address'),

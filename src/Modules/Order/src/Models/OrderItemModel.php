@@ -31,6 +31,11 @@ final class OrderItemModel extends AbstractStringableModel
         'comments',
     ];
 
+    protected $casts = [
+        'pickup_address' => 'array',
+        'comments' => 'array',
+    ];
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(OrderModel::class);
