@@ -4,60 +4,48 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\UseCases\Impl;
 
-use SmartDelivery\DeliveryService\Raketa\Service\CreateOrderService;
+use Illuminate\Database\DatabaseManager;
+use Psr\Log\LoggerInterface;
 use SmartDelivery\DeliveryService\Raketa\UseCases\CreateOrderUseCase;
-use SmartDelivery\HttpClients\Raketa\RaketaHttpClientInterface;
-use SmartDelivery\DeliveryService\Raketa\Dto\AddressDto;
-use SmartDelivery\DeliveryService\Raketa\Dto\CreateOrderDto as RaketaCreateOrderDto;
-use SmartDelivery\DeliveryService\Raketa\Dto\PointDto;
-use SmartDelivery\DeliveryService\Raketa\Dto\TaskDto;
-use SmartDelivery\HttpClients\Raketa\Enums\TransportTypeEnum;
-use SmartDelivery\Main\Exceptions\CantStoreException;
+use SmartDelivery\Order\Dto\RequestOrderDto;
+use SmartDelivery\Order\Strategies\CreateOrderProcess\Exception\CantOrderProcessStrategy;
+use SmartDelivery\Order\Strategies\CreateOrderProcess\Impl\CreateOrderProcessStrategy;
+use SmartDelivery\Order\Strategies\CreateOrderProcess\Impl\PlannedOrderProcessStrategy;
+use SmartDelivery\Order\Strategies\CreateOrderProcess\OrderProcessStrategy;
+use Throwable;
 
 final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
 {
     public function __construct(
-        private CreateOrderService $orderOrderService,
-//        private RaketaHttpClientInterface $raketaHttpClient
+        private DatabaseManager $databaseManager,
+        private LoggerInterface $logger
     ) {}
 
-    public function handle(
-        RaketaCreateOrderDto $dto,
-    ): void
+    public function handle(RequestOrderDto $dto): void
     {
-        $OrderOrderEntity = $this->orderOrderService->handle($dto);
+        $this->databaseManager->beginTransaction();
 
-
-        if ($OrderOrderEntity === null) {
-            throw new CantStoreException('Failed to create smart deal order');
+        /** @var OrderProcessStrategy $strategy */
+        $strategy = null;
+        if ($dto->order_planned_at === null) {
+            $strategy = app()->make(CreateOrderProcessStrategy::class);
+        } else {
+            $strategy = app()->make(PlannedOrderProcessStrategy::class);
         }
 
-        $raketaDto = new RaketaCreateOrderDto(
-                transportType: TransportTypeEnum::CAR,
-                pointA: new PointDto(
-                    phone_number: $OrderOrderEntity->phone,
-                    address: new AddressDto(
-                            street: $OrderOrderEntity->point_a->street,
-                            building: $OrderOrderEntity->point_a->building,
-                        ),
-                    products: $OrderOrderEntity->products
-                ),
-                pointB: new PointDto(
-                phone_number: $OrderOrderEntity->phone,
-                    address: new AddressDto(
-                        street: $OrderOrderEntity->point_b->street,
-                        building: $OrderOrderEntity->point_b->building,
-                    ),
-                    products: $OrderOrderEntity->products,
-                    merchant_order_id: $OrderOrderEntity->external_order_id,
-                    task: new TaskDto(
-                        task_id: 11398, // Default task id - check product
-                        comment: "Проверить товар"
-                    ),
-                ),
-                callbackUrl: route('raketa.hook.orders.status')
-        );
+        try {
+            $strategy->handle($dto);
+        } catch (Throwable $e) {
+            $this->logger->critical('[CardHoldBalanceProcessUseCase]', [
+                'exception' => $e->getMessage(),
+                'orderId' => $dto->order_id,
+            ]);
 
-        $this->raketaHttpClient->createOrder($raketaDto);
+            $this->databaseManager->rollBack();
+
+            throw new CantOrderProcessStrategy($e->getMessage(), $e->getCode(), $e);
+        }
+
+        $this->databaseManager->commit();
     }
 }

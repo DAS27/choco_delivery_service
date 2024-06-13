@@ -64,11 +64,11 @@ final class RaketaHttpServiceProvider extends AppServiceProvider
             default => config('choco-dostavka.base.prod.token'),
         };
 
-        $this->app->when(RaketaHttpClientInterface::class)
+        $this->app->when(RaketaHttpClient::class)
             ->needs('$apiUrl')
             ->give($apiUrl);
 
-        $this->app->when(RaketaHttpClientInterface::class)
+        $this->app->when(RaketaHttpClient::class)
             ->needs('$token')
             ->give($token);
     }

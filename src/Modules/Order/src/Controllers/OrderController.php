@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SmartDelivery\DeliveryService\Raketa\Controllers;
+namespace SmartDelivery\Order\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,11 +10,10 @@ use Psr\Log\LoggerInterface;
 use SmartDelivery\Core\JobDispatcher\JobDispatcherInterface;
 use SmartDelivery\DeliveryService\Raketa\UseCases\CreateOrderUseCase;
 use SmartDelivery\DeliveryService\Raketa\UseCases\ProcessOrderStatusHookUseCase;
-use SmartDelivery\DeliveryService\Raketa\Dto\AddressDto;
-use SmartDelivery\DeliveryService\Raketa\Dto\ProductDto;
 use SmartDelivery\Main\Controllers\AbstractController;
+use SmartDelivery\Order\Dto\RequestOrderDto;
 
-final class RaketaController extends AbstractController
+final class OrderController extends AbstractController
 {
     public function __construct(
         private readonly JobDispatcherInterface $jobDispatcher
@@ -25,31 +24,19 @@ final class RaketaController extends AbstractController
         CreateOrderUseCase $createOrderUseCase,
         LoggerInterface $logger
     ): JsonResponse {
-        dd($request->all());
-        $logger->info('[RaketaController] Incoming create order request', $request->all());
+        $logger->info('[OrderController] Incoming create order request', $request->all());
 
-        $createOrderUseCase->handle(
-            new CreateOrderDto(
-                phone: $request->get('phone'),
-                point_a: new AddressDto(
-                    street: $request->get('points')[0]['street'],
-                    building: $request->get('points')[0]['building'],
-                ),
-                point_b: new AddressDto(
-                    street: $request->get('points')[1]['street'],
-                    building: $request->get('points')[1]['building'],
-                ),
-                products: array_map(
-                    fn($item) => new ProductDto(
-                        title: $item['title'],
-                        price: $item['price'],
-                        count: $item['count']
-                    ),
-                    $request->get('products')),
-                external_order_id: $request->get('order_id'),
-                planned_datetime: $request->get('planned_datetime')
-            )
-        );
+        $createOrderUseCase->handle(new RequestOrderDto(
+            order_id: $request->get('order_id'),
+            warehouse_order_id: $request->get('all_style_order_id'),
+            phone: $request->get('phone'),
+            address: $request->get('address'),
+            delivery_service_name: $request->get('delivery_service_name'),
+            order_created_at: $request->get('created_at'),
+            total_amount: $request->get('total_amount'),
+            products: $request->get('products'),
+            order_planned_at: $request->get('planned_at'),
+        ));
 
         return $this->sendResponse(['data' => 'Ok']);
     }
@@ -60,6 +47,10 @@ final class RaketaController extends AbstractController
     ):void {
         /*$logger->info('[RaketaController] Incoming order status hook', $request->all());
 
+
+        if ($request->get('status') === StatusEnum::SUCCESS->value) {
+
+        }
 
         foreach ($request->get('orders') as $order) {
             if ($order['status'] === OrderStatusEnum::ASSIGNED->value) {

@@ -10,6 +10,7 @@ return [
     //Modules
     \SmartDelivery\HttpClients\Raketa\Providers\RaketaHttpServiceProvider::class,
     \SmartDelivery\DeliveryService\Raketa\Providers\RaketaServiceProvider::class,
+    \SmartDelivery\DeliveryService\Main\Providers\DeliveryServiceMainServiceProvider::class,
     \SmartDelivery\Order\Providers\OrderServiceProvider::class,
 ];
 

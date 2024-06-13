@@ -62,29 +62,7 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
         $formParams = [
             'transport_type' => $createOrderDto->transportType->value,
             'callback_url' => $createOrderDto->callbackUrl,
-            'points' => [
-                [
-                    'merchant_order_id' => $createOrderDto->pointA->merchant_order_id,
-                    'address' => [
-                        'street' => $createOrderDto->pointA->address->street,
-                        'building' => $createOrderDto->pointA->address->building,
-                    ],
-                    'task' => [
-                        'task_id' => $createOrderDto->pointA->task->task_id,
-                        'comment' => $createOrderDto->pointA->task->comment
-                    ],
-                    'items' => $createOrderDto->pointA->products
-                ],
-                [
-                    'contact_info' => [
-                        'phone_number' => $createOrderDto->pointB->phone_number
-                    ],
-                    'address' => [
-                        'street' => $createOrderDto->pointB->address->street,
-                        'building' => $createOrderDto->pointB->address->building,
-                    ],
-                ],
-            ],
+            'points' => $createOrderDto->points
         ];
 
         try {

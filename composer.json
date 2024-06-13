@@ -30,7 +30,8 @@
             "SmartDelivery\\Order\\": "src/Modules/Order/src/",
             "SmartDelivery\\Core\\": "src/Core/src/",
             "SmartDelivery\\HttpClients\\Raketa\\": "src/HttpClients/Raketa/src/",
-            "SmartDelivery\\DeliveryService\\Raketa\\": "src/Modules/DeliveryService/Raketa/src/"
+            "SmartDelivery\\DeliveryService\\Raketa\\": "src/Modules/DeliveryService/Raketa/src/",
+            "SmartDelivery\\DeliveryService\\Main\\": "src/Modules/DeliveryService/Main/src/"
         }
     },
     "autoload-dev": {

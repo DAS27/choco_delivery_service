@@ -11,8 +11,8 @@ final class CreateOrderDto extends Data
 {
     public function __construct(
         public TransportTypeEnum $transportType,
-        public PointDto $pointA,
-        public PointDto $pointB,
+        /** @var PointDto[] */
+        public array $points,
         public ?string $callbackUrl = null
     ) {}
 }

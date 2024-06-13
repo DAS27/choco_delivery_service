@@ -5,20 +5,26 @@ declare(strict_types=1);
 namespace SmartDelivery\Order\Providers;
 
 use App\Providers\AppServiceProvider;
-use SmartDelivery\Order\Repositories\CreateOrderRepository;
-use SmartDelivery\Order\Repositories\Impl\CreateOrderRepositoryImpl;
-use SmartDelivery\Order\Service\CreateOrderService;
-use SmartDelivery\Order\Service\Impl\CreateOrderServiceImpl;
+use SmartDelivery\Order\Repositories\Impl\OrderItemRepositoryImpl;
+use SmartDelivery\Order\Repositories\OrderItemRepository;
+use SmartDelivery\Order\Repositories\OrderRepository;
+use SmartDelivery\Order\Repositories\Impl\OrderRepositoryImpl;
+use SmartDelivery\Order\Services\CreateOrderService;
+use SmartDelivery\Order\Services\Impl\CreateOrderServiceImpl;
+use SmartDelivery\Order\UseCases\CreateOrderUseCase;
+use SmartDelivery\Order\UseCases\Impl\CreateOrderUseCaseImpl;
 
 final class OrderDIServiceProvider extends AppServiceProvider
 {
     public array $bindings = [
         //Repositories
-        CreateOrderRepository::class => CreateOrderRepositoryImpl::class,
+        OrderRepository::class => OrderRepositoryImpl::class,
+        OrderItemRepository::class => OrderItemRepositoryImpl::class,
 
         //Services
         CreateOrderService::class => CreateOrderServiceImpl::class,
 
         //Use Cases
+        CreateOrderUseCase::class => CreateOrderUseCaseImpl::class,
     ];
 }

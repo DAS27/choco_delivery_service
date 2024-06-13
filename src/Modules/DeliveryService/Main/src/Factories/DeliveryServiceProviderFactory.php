@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Main\Factories;
 
-use SmartDelivery\DeliveryService\Raketa\UseCases\Impl\RaketaOrderContractImpl;
 use SmartDelivery\DeliveryService\Main\Contracts\CreateOrderContract;
+use SmartDelivery\DeliveryService\Main\Enums\DeliveryServiceEnum;
 use SmartDelivery\DeliveryService\Main\Exceptions\UnknownDeliveryServiceTypeException;
-use SmartDelivery\Order\Enums\OrderProviderEnum;
+use SmartDelivery\DeliveryService\Raketa\UseCases\Impl\RaketaOrderContractImpl;
 
 final class DeliveryServiceProviderFactory
 {
     /**
      * @throws UnknownDeliveryServiceTypeException
      */
-    public function buildIssueContract(OrderProviderEnum $orderProviderEnum): CreateOrderContract
+    public function buildIssueContract(DeliveryServiceEnum $serviceEnum): CreateOrderContract
     {
         return match (true) {
-            $orderProviderEnum === OrderProviderEnum::RAKETA => app()->make(RaketaOrderContractImpl::class),
+            $serviceEnum === DeliveryServiceEnum::RAKETA => app()->make(RaketaOrderContractImpl::class),
 
-            default => throw new UnknownDeliveryServiceTypeException('Unknown delivery service provider type: ' . $orderProviderEnum->value),
+            default => throw new UnknownDeliveryServiceTypeException('Unknown delivery service provider type: ' . $serviceEnum->value),
         };
     }
 }

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\UseCases;
 
-
-use SmartDelivery\DeliveryService\Raketa\Dto\CreateOrderDto;
+use SmartDelivery\Order\Dto\RequestOrderDto;
 
 interface CreateOrderUseCase
 {
-    public function handle(CreateOrderDto $dto): void;
+    public function handle(RequestOrderDto $dto): void;
 }

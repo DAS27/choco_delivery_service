@@ -25,6 +25,7 @@ final class OrderServiceProvider extends AppServiceProvider
     {
         $this->registerConfigs();
         $this->app->register(OrderDIServiceProvider::class);
+        $this->app->register(OrdreRouteServiceProvider::class);
     }
 
     private function modulePath(string $path): string

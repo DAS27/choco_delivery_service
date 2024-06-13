@@ -13,16 +13,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('raketa_orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('merchant_id');
-            $table->string('external_order_id');
-            $table->string('delivery_service_name');
-            $table->json('delivery_address');
+            $table->string('order_id');
+            $table->string('warehouse_order_id')->nullable();
             $table->string('phone');
-            $table->string('scheduled_delivery_time')->nullable();
-            $table->string('status');
+            $table->json('address');
+            $table->string('delivery_service_name');
+            $table->string('order_planned_at')->nullable();
+            $table->string('order_created_at');
             $table->string('total_amount');
+            $table->json('products');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('raketa_orders');
     }
 };
