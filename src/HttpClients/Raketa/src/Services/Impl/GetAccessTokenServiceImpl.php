@@ -5,6 +5,7 @@ namespace SmartDelivery\HttpClients\Raketa\Services\Impl;
 use SmartDelivery\HttpClients\Raketa\DTO\AccessTokenDto;
 use SmartDelivery\HttpClients\Raketa\RaketaHttpClient;
 use SmartDelivery\HttpClients\Raketa\Entities\AccessTokenEntity;
+use SmartDelivery\HttpClients\Raketa\RaketaHttpClientInterface;
 use SmartDelivery\HttpClients\Raketa\Repositories\TokenStorageRepository;
 use SmartDelivery\HttpClients\Raketa\Services\GetAccessTokenService;
 

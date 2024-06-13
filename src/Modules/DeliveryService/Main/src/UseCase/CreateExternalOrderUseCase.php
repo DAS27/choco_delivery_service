@@ -9,5 +9,5 @@ use SmartDelivery\DeliveryService\Main\Exceptions\CantCreateExternalOrderExcepti
 interface CreateExternalOrderUseCase
 {
     /** @throws CantCreateExternalOrderException */
-    public function handle(CreateExternalOrderDto $dto): CreateExternalCardResponse;
+    public function handle(CreateExternalOrderDto $dto): void;
 }

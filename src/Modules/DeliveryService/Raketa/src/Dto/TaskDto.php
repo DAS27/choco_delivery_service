@@ -9,7 +9,7 @@ use Spatie\LaravelData\Data;
 final class TaskDto extends Data
 {
     public function __construct(
-        public int $task_id,
+        public ?int $task_id,
         public ?string $comment = null
     ) {}
 }

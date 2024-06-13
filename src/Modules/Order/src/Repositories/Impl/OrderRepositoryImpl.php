@@ -29,7 +29,6 @@ final class OrderRepositoryImpl implements OrderRepository
         $model->total_amount = $dto->total_amount;
         $model->save();
 
-        $model->fresh();
         return $this->buildEntityFromModel($model);
     }
 

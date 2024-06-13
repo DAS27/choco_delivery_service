@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SmartDelivery\Order\UseCases\Impl;
 
 use SmartDelivery\DeliveryService\Main\Dto\CreateExternalOrderDto;
+use SmartDelivery\DeliveryService\Main\Dto\WarehouseTypeEnum;
 use SmartDelivery\DeliveryService\Main\Enums\DeliveryServiceEnum;
 use SmartDelivery\DeliveryService\Main\UseCase\CreateExternalOrderUseCase;
 use SmartDelivery\DeliveryService\Raketa\Dto\AddressDto;
@@ -37,6 +38,8 @@ final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
                         title: $product['title'],
                         price: $product['price'],
                         count: $product['count'],
+                        address: AddressDto::from($product['address']),
+                        warehouse_type: WarehouseTypeEnum::from($product['warehouse_type'])
                     );
                 }, $dto->products),
                 total_amount: $dto->total_amount,

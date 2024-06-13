@@ -12,7 +12,7 @@ final class PointDto extends Data
         public string $phone_number,
         public AddressDto $address,
         /** @var ProductDto[] */
-        public array $products,
+        public ?array $products,
         public ?int $merchant_order_id = null,
         public ?TaskDto $task = null,
     ) {}

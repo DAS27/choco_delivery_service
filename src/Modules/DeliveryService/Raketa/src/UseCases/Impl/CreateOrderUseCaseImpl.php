@@ -36,7 +36,7 @@ final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
             /** @var OrderProcessStrategy $strategy */
             $strategy->handle($dto);
         } catch (Throwable $e) {
-            $this->logger->critical('[CardHoldBalanceProcessUseCase]', [
+            $this->logger->critical('[CreateOrderUseCase]', [
                 'exception' => $e->getMessage(),
                 'orderId' => $dto->order_id,
             ]);

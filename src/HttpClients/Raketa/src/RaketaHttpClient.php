@@ -10,6 +10,7 @@ use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 use SmartDelivery\DeliveryService\Raketa\Dto\CreateOrderDto;
+use SmartDelivery\DeliveryService\Raketa\Dto\PointDto;
 use SmartDelivery\HttpClients\Raketa\DTO\AccessTokenDto;
 use SmartDelivery\HttpClients\Raketa\Entities\UnexpectedErrorException;
 use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
@@ -35,7 +36,7 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
         private string $refreshAccessToken,
     ) {}
 
-    public function getHeaders(): array
+    private function getHeaders(): array
     {
         return [
             'Authorization' => 'JWT ' . $this->getAccessToken(),
@@ -48,8 +49,8 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
         return $this->getAccessTokenService->handle($this->accessToken, $this->refreshAccessToken);
     }
 
-    public function validateResponse(ResponseInterface $response): void {
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
+    private function validateResponse(ResponseInterface $response): void {
+        if ($response->getStatusCode() !== Response::HTTP_OK && $response->getStatusCode() !== Response::HTTP_CREATED) {
             throw new UnexpectedErrorException(
                 $response->getBody()->getContents(),
                 $response->getStatusCode()
@@ -62,7 +63,7 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
         $formParams = [
             'transport_type' => $createOrderDto->transportType->value,
             'callback_url' => $createOrderDto->callbackUrl,
-            'points' => $createOrderDto->points
+            'points' => array_map((fn (PointDto $point) => $point->toArray()), $createOrderDto->points),
         ];
 
         try {
