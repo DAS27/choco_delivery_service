@@ -40,9 +40,9 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
                     warehouse_type: null
                 )],
                 merchant_order_id: $externalOrderDto->warehouse_order_id,
-                tasks: new TaskDto(
+                tasks: [new TaskDto(
                     id: $productDto->warehouse_type === WarehouseTypeEnum::ALL_STYLE ? 11398 : null,
-                )
+                )]
             );
         }, $externalOrderDto->products);
 

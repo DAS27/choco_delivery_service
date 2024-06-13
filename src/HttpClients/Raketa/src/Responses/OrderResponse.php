@@ -9,8 +9,8 @@ final class OrderResponse
     public function __construct(
         public int $id,
         public string $status,
-        public int $price,
-        public int $sms_code,
+        public string $price,
+        public ?int $sms_code,
         public ?int $merchant_order_id,
         public ?string $tracking_short_link,
         public string $tracking_uuid,

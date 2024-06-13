@@ -14,6 +14,7 @@ final class PointDto extends Data
         /** @var ProductDto[] */
         public ?array $items = null,
         public ?int $merchant_order_id = null,
-        public ?TaskDto $tasks = null,
+        /** @var TaskDto[] */
+        public ?array $tasks = null,
     ) {}
 }
