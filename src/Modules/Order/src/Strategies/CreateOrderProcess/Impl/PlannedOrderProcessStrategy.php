@@ -6,15 +6,16 @@ namespace SmartDelivery\Order\Strategies\CreateOrderProcess\Impl;
 
 use SmartDelivery\Order\Dto\RequestOrderDto;
 use SmartDelivery\Order\Strategies\CreateOrderProcess\OrderProcessStrategy;
+use SmartDelivery\Order\UseCases\CreateOrderUseCase;
 
-final class PlannedOrderProcessStrategy implements OrderProcessStrategy
+final readonly class PlannedOrderProcessStrategy implements OrderProcessStrategy
 {
     public function __construct(
-
+        private CreateOrderUseCase $createOrderUseCase
     ) {}
 
-    public function handle(RequestOrderDto $dto)
+    public function handle(RequestOrderDto $dto): void
     {
-        // TODO: Implement handle() method.
+        $this->createOrderUseCase->handle($dto);
     }
 }

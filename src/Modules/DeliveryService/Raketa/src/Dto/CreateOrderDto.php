@@ -13,6 +13,7 @@ final class CreateOrderDto extends Data
         public TransportTypeEnum $transportType,
         /** @var PointDto[] */
         public array $points,
-        public ?string $callbackUrl = null
+        public ?string $callbackUrl = null,
+        public ?string $orderPlannedAt = null
     ) {}
 }

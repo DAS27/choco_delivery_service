@@ -48,10 +48,15 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
 
         $response = $this->httpClient->createOrder(
             new CreateOrderDto(
-            transportType: TransportTypeEnum::CAR,
-            points: array_map((fn (PointDto $point) => $point->toArray()), array_merge($startPoint, [$finalPoint])),
-            callbackUrl: "https://0ecb-46-235-72-49.ngrok-free.app/"
-        ));
+                transportType: TransportTypeEnum::CAR,
+                points: array_map(
+                    (fn(PointDto $point) => $point->toArray()),
+                    array_merge($startPoint, [$finalPoint])
+                ),
+                callbackUrl: "https://0ecb-46-235-72-49.ngrok-free.app",
+                orderPlannedAt: $externalOrderDto->order_planned_at
+            )
+        );
     }
 
     public function getProvider(): DeliveryServiceEnum
