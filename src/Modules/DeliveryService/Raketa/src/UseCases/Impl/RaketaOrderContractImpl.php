@@ -26,7 +26,6 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
         $finalPoint = new PointDto(
             contact_info: new ContactInfoDto(phone_number: $externalOrderDto->phone),
             address: $externalOrderDto->address,
-            items: [],
         );
 
         $startPoint = array_map(function (ProductDto $productDto) use ($externalOrderDto) {

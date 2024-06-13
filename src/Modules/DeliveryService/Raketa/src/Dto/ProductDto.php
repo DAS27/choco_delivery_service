@@ -11,7 +11,7 @@ final class ProductDto extends Data
 {
     public function __construct(
         public string $title,
-        public string $price,
+        public int $price,
         public int $count,
         public ?AddressDto $address,
         public ?WarehouseTypeEnum $warehouse_type

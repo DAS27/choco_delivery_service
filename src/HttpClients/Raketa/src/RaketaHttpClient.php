@@ -63,11 +63,12 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
             'callback_url' => $createOrderDto->callbackUrl,
             'points' => $createOrderDto->points,
         ];
-        dd($formParams);
+
+        $preparedData = $this->removeNullValues($formParams);
 
         try {
             $response = $this->client->request('POST', $this->apiUrl . self::CREATE_ORDER, [
-                RequestOptions::JSON => $formParams,
+                RequestOptions::JSON => $preparedData,
                 'headers' => $this->getHeaders()
             ]);
         } catch (GuzzleException $e) {
@@ -118,5 +119,20 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
     public function cancelOrder(string $orderId): void
     {
         // TODO: Implement cancelOrder() method.
+    }
+
+    private function removeNullValues(array $array): array
+    {
+        foreach ($array as $key => &$value) {
+            if (is_array($value)) {
+                $value = $this->removeNullValues($value);
+            }
+
+            if ($value === null) {
+                unset($array[$key]);
+            }
+        }
+
+        return $array;
     }
 }

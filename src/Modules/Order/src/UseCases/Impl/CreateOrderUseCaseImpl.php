@@ -36,7 +36,7 @@ final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
                 products: array_map(function (array $product) {
                     return new ProductDto(
                         title: $product['title'],
-                        price: $product['price'],
+                        price: (int) $product['price'],
                         count: $product['count'],
                         address: AddressDto::from($product['address']),
                         warehouse_type: WarehouseTypeEnum::from($product['warehouse_type'])
