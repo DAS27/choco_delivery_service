@@ -8,6 +8,7 @@ use SmartDelivery\DeliveryService\Main\Contracts\CreateOrderContract;
 use SmartDelivery\DeliveryService\Main\Dto\CreateExternalOrderDto;
 use SmartDelivery\DeliveryService\Main\Dto\WarehouseTypeEnum;
 use SmartDelivery\DeliveryService\Main\Enums\DeliveryServiceEnum;
+use SmartDelivery\DeliveryService\Raketa\Dto\ContactInfoDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\CreateOrderDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\PointDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\ProductDto;
@@ -23,18 +24,16 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
     public function handle(CreateExternalOrderDto $externalOrderDto): void
     {
         $finalPoint = new PointDto(
-            phone_number: $externalOrderDto->phone,
+            contact_info: new ContactInfoDto(phone_number: $externalOrderDto->phone),
             address: $externalOrderDto->address,
-            products: null,
-            merchant_order_id: null,
-            task: null
+            items: [],
         );
 
-        $points = array_map(function (ProductDto $productDto) use ($externalOrderDto) {
+        $startPoint = array_map(function (ProductDto $productDto) use ($externalOrderDto) {
             return new PointDto(
-                phone_number: $externalOrderDto->phone,
+                contact_info: new ContactInfoDto(phone_number: $externalOrderDto->phone),
                 address: $productDto->address,
-                products: [new ProductDto(
+                items: [new ProductDto(
                     title: $productDto->title,
                     price: $productDto->price,
                     count: $productDto->count,
@@ -42,9 +41,8 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
                     warehouse_type: null
                 )],
                 merchant_order_id: $externalOrderDto->warehouse_order_id,
-                task: new TaskDto(
-                    task_id: $productDto->warehouse_type === WarehouseTypeEnum::ALL_STYLE ? 11398 : null,
-                    comment: null
+                tasks: new TaskDto(
+                    id: $productDto->warehouse_type === WarehouseTypeEnum::ALL_STYLE ? 11398 : null,
                 )
             );
         }, $externalOrderDto->products);
@@ -52,7 +50,7 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
         $response = $this->httpClient->createOrder(
             new CreateOrderDto(
             transportType: TransportTypeEnum::CAR,
-            points: array_merge($points, [$finalPoint]),
+            points: array_map((fn (PointDto $point) => $point->toArray()), array_merge($startPoint, [$finalPoint])),
             callbackUrl: "https://0ecb-46-235-72-49.ngrok-free.app/"
         ));
     }

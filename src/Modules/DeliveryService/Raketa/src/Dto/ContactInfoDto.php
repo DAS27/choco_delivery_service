@@ -6,10 +6,9 @@ namespace SmartDelivery\DeliveryService\Raketa\Dto;
 
 use Spatie\LaravelData\Data;
 
-final class TaskDto extends Data
+final class ContactInfoDto extends Data
 {
     public function __construct(
-        public ?int $id,
-        public ?string $comment = null
+        public string $phone_number,
     ) {}
 }

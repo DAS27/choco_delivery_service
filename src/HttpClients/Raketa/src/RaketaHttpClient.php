@@ -61,8 +61,9 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
         $formParams = [
             'transport_type' => $createOrderDto->transportType->value,
             'callback_url' => $createOrderDto->callbackUrl,
-            'points' => array_map((fn (PointDto $point) => $point->toArray()), $createOrderDto->points),
+            'points' => $createOrderDto->points,
         ];
+        dd($formParams);
 
         try {
             $response = $this->client->request('POST', $this->apiUrl . self::CREATE_ORDER, [

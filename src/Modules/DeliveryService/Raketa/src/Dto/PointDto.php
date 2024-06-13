@@ -9,11 +9,11 @@ use Spatie\LaravelData\Data;
 final class PointDto extends Data
 {
     public function __construct(
-        public string $phone_number,
+        public ContactInfoDto $contact_info,
         public AddressDto $address,
         /** @var ProductDto[] */
-        public ?array $products,
+        public ?array $items,
         public ?int $merchant_order_id = null,
-        public ?TaskDto $task = null,
+        public ?TaskDto $tasks = null,
     ) {}
 }
