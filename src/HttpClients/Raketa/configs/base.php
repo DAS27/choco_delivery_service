@@ -9,6 +9,7 @@ return [
     ],
     'dev' => [
         'token' => env('CHOCO_DOSTAVKA_DEV_TOKEN'),
+        'refresh_token' => env('CHOCO_DOSTAVKA_DEV_REFRESH_TOKEN'),
         'api_url' => env('CHOCO_DOSTAVKA_DEV_API_URL'),
     ],
 ];

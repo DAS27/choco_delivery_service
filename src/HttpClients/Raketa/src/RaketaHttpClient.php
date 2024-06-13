@@ -11,11 +11,10 @@ use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 use SmartDelivery\DeliveryService\Raketa\Dto\CreateOrderDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\PointDto;
-use SmartDelivery\HttpClients\Raketa\DTO\AccessTokenDto;
+use SmartDelivery\HttpClients\Raketa\Entities\AccessTokenEntity;
 use SmartDelivery\HttpClients\Raketa\Entities\UnexpectedErrorException;
 use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
 use SmartDelivery\HttpClients\Raketa\Responses\OrderGroupResponse;
-use SmartDelivery\HttpClients\Raketa\Responses\GetAccessTokenResponse;
 use SmartDelivery\HttpClients\Raketa\Responses\OrderResponse;
 use SmartDelivery\HttpClients\Raketa\Services\GetAccessTokenService;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +22,6 @@ use Throwable;
 
 final readonly class RaketaHttpClient implements RaketaHttpClientInterface
 {
-    private const GET_ACCESS_TOKEN = '/api-gate/v0/common/api-token-refresh';
     private const CREATE_ORDER = '/api-gate/v0/deliveries/groups';
     private const GET_ORDER_DETAIL = '/api-gate/v0/deliveries/groups/group_id';
     private const CANCEL_ORDER = '/api-gate/v0/deliveries/cancel-group/group_id';
@@ -32,21 +30,21 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
         private GetAccessTokenService $getAccessTokenService,
         private Client $client,
         private string $apiUrl,
-        private string $accessToken,
+        private string $token,
         private string $refreshAccessToken,
     ) {}
 
     private function getHeaders(): array
     {
         return [
-            'Authorization' => 'JWT ' . $this->getAccessToken(),
+            'Authorization' => 'JWT ' . $this->getAccessToken()->access_token,
             'Content-Type' => 'application/json',
         ];
     }
 
-    public function getAccessToken(): string
+    public function getAccessToken(): AccessTokenEntity
     {
-        return $this->getAccessTokenService->handle($this->accessToken, $this->refreshAccessToken);
+        return $this->getAccessTokenService->handle($this->token, $this->refreshAccessToken);
     }
 
     private function validateResponse(ResponseInterface $response): void {
@@ -119,35 +117,5 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
     public function cancelOrder(string $orderId): void
     {
         // TODO: Implement cancelOrder() method.
-    }
-
-    public function obtainAccessToken(AccessTokenDto $accessTokenDto): GetAccessTokenResponse
-    {
-        $formParams = [
-            'refresh' => $accessTokenDto->refresh_token,
-        ];
-
-        try {
-            $response = $this->client->request('POST', $this->apiUrl . self::GET_ACCESS_TOKEN, [
-                RequestOptions::JSON => $formParams,
-                'headers' => $this->getHeaders()
-            ]);
-        } catch (GuzzleException $e) {
-            throw new UnexpectedErrorException($e->getMessage(), 0, $e);
-        }
-
-        $this->validateResponse($response);
-
-        try {
-            $responseBody = $response->getBody()->getContents();
-            $responseBodyArr = json_decode($responseBody, true);
-
-            return new GetAccessTokenResponse(
-                access: $responseBodyArr['access'],
-                refresh: $responseBodyArr['refresh']
-            );
-        } catch (Throwable $e) {
-            throw new UnexpectedErrorException($e->getMessage(), 0, $e);
-        }
     }
 }

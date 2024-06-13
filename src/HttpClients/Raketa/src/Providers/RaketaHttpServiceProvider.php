@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace SmartDelivery\HttpClients\Raketa\Providers;
 
 use App\Providers\AppServiceProvider;
+use SmartDelivery\HttpClients\Raketa\RaketaAuthHttpClientInterface;
 use SmartDelivery\HttpClients\Raketa\RaketaHttpClient;
 use SmartDelivery\HttpClients\Raketa\RaketaHttpClientInterface;
 use SmartDelivery\HttpClients\Raketa\Repositories\Impl\RedisTokenStorageRepositoryImpl;
 use SmartDelivery\HttpClients\Raketa\Repositories\TokenStorageRepository;
 use SmartDelivery\HttpClients\Raketa\Services\GetAccessTokenService;
 use SmartDelivery\HttpClients\Raketa\Services\Impl\GetAccessTokenServiceImpl;
+use SmartDelivery\HttpClients\Raketa\Services\Impl\RaketaAuthHttpClientInterfaceImpl;
 
 final class RaketaHttpServiceProvider extends AppServiceProvider
 {
@@ -18,6 +20,7 @@ final class RaketaHttpServiceProvider extends AppServiceProvider
         TokenStorageRepository::class => RedisTokenStorageRepositoryImpl::class,
         GetAccessTokenService::class => GetAccessTokenServiceImpl::class,
         RaketaHttpClientInterface::class => RaketaHttpClient::class,
+        RaketaAuthHttpClientInterface::class => RaketaAuthHttpClientInterfaceImpl::class
     ];
 
     private const CONFIGS_PATH = 'configs';
@@ -55,13 +58,18 @@ final class RaketaHttpServiceProvider extends AppServiceProvider
         $env = env('APP_ENV', 'production');
 
         $token = match ($env) {
-            'local', 'staging' => config('choco-dostavka.base.dev.token'),
-            default => config('choco-dostavka.base.prod.token'),
+            'local', 'staging' => config('raketa-http-client.base.dev.token'),
+            default => config('raketa-http-client.base.prod.token'),
+        };
+
+        $refreshToken = match ($env) {
+            'local', 'staging' => config('raketa-http-client.base.dev.refresh_token'),
+            default => config('raketa-http-client.base.prod.token'),
         };
 
         $apiUrl = match ($env) {
-            'local', 'staging' => config('choco-dostavka.base.dev.api_url'),
-            default => config('choco-dostavka.base.prod.token'),
+            'local', 'staging' => config('raketa-http-client.base.dev.api_url'),
+            default => config('raketa-http-client.base.prod.token'),
         };
 
         $this->app->when(RaketaHttpClient::class)
@@ -71,5 +79,21 @@ final class RaketaHttpServiceProvider extends AppServiceProvider
         $this->app->when(RaketaHttpClient::class)
             ->needs('$token')
             ->give($token);
+
+        $this->app->when(RaketaHttpClient::class)
+            ->needs('$refreshAccessToken')
+            ->give($refreshToken);
+
+        $this->app->when(RaketaAuthHttpClientInterfaceImpl::class)
+            ->needs('$apiUrl')
+            ->give($apiUrl);
+
+        $this->app->when(RaketaAuthHttpClientInterfaceImpl::class)
+            ->needs('$token')
+            ->give($token);
+
+        $this->app->when(RaketaAuthHttpClientInterfaceImpl::class)
+            ->needs('$refreshAccessToken')
+            ->give($refreshToken);
     }
 }

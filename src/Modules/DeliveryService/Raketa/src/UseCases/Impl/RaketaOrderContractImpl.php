@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\UseCases\Impl;
 
-use Illuminate\Support\Facades\Log;
 use SmartDelivery\DeliveryService\Main\Contracts\CreateOrderContract;
-use SmartDelivery\DeliveryService\Main\Contracts\Dto\CreateOrderResponseDto;
 use SmartDelivery\DeliveryService\Main\Dto\CreateExternalOrderDto;
 use SmartDelivery\DeliveryService\Main\Dto\WarehouseTypeEnum;
 use SmartDelivery\DeliveryService\Main\Enums\DeliveryServiceEnum;
-use SmartDelivery\DeliveryService\Main\Exceptions\CantCreateExternalOrderException;
 use SmartDelivery\DeliveryService\Raketa\Dto\CreateOrderDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\PointDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\ProductDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\TaskDto;
-use SmartDelivery\HttpClients\Raketa\Entities\UnexpectedErrorException;
 use SmartDelivery\HttpClients\Raketa\Enums\TransportTypeEnum;
 use SmartDelivery\HttpClients\Raketa\RaketaHttpClientInterface;
 
@@ -26,8 +22,6 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
     ) {}
     public function handle(CreateExternalOrderDto $externalOrderDto): void
     {
-        Log::info('Entering handle method in RaketaOrderContractImpl');
-
         $finalPoint = new PointDto(
             phone_number: $externalOrderDto->phone,
             address: $externalOrderDto->address,
@@ -58,7 +52,8 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
         $response = $this->httpClient->createOrder(
             new CreateOrderDto(
             transportType: TransportTypeEnum::CAR,
-            points: array_merge($points, [$finalPoint])
+            points: array_merge($points, [$finalPoint]),
+            callbackUrl: "https://0ecb-46-235-72-49.ngrok-free.app/"
         ));
     }
 
