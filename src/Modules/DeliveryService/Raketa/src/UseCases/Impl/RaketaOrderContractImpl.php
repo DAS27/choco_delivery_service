@@ -21,6 +21,7 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
     public function __construct(
         private RaketaHttpClientInterface $httpClient,
     ) {}
+
     public function handle(CreateExternalOrderDto $externalOrderDto): void
     {
         $finalPoint = new PointDto(
@@ -53,7 +54,7 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
                     (fn(PointDto $point) => $point->toArray()),
                     array_merge($startPoint, [$finalPoint])
                 ),
-                callbackUrl: "https://0ecb-46-235-72-49.ngrok-free.app",
+                callbackUrl: "https://67c4-46-235-72-49.ngrok-free.app",
                 orderPlannedAt: $externalOrderDto->order_planned_at
             )
         );

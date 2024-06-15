@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\UseCases;
 
-use SmartDelivery\DeliveryService\Raketa\Dto\ProcessOrderStatusHookDto;
+use SmartDelivery\HttpClients\SmartDeal\src\DTO\OrderStatusDto;
 
 interface ProcessOrderStatusHookUseCase
 {
-    public function handle(ProcessOrderStatusHookDto $dto): void;
+    public function handle(OrderStatusDto $dto): void;
 }

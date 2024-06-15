@@ -8,8 +8,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 use SmartDelivery\Core\JobDispatcher\JobDispatcherInterface;
+use SmartDelivery\DeliveryService\Raketa\Enums\OrderGroupStatusEnum;
+use SmartDelivery\DeliveryService\Raketa\Enums\OrderStatusEnum;
 use SmartDelivery\DeliveryService\Raketa\UseCases\CreateOrderUseCase;
 use SmartDelivery\DeliveryService\Raketa\UseCases\ProcessOrderStatusHookUseCase;
+use SmartDelivery\HttpClients\SmartDeal\src\DTO\OrderStatusDto;
 use SmartDelivery\Main\Controllers\AbstractController;
 use SmartDelivery\Order\Dto\RequestOrderDto;
 
@@ -46,27 +49,19 @@ final class OrderController extends AbstractController
         ProcessOrderStatusHookUseCase $processOrderStatusHookUseCase,
         LoggerInterface $logger
     ):void {
-        /*$logger->info('[RaketaController] Incoming order status hook', $request->all());
+        $logger->info('[RaketaController] Incoming order status hook', $request->all());
 
-
-        if ($request->get('status') === StatusEnum::SUCCESS->value) {
-
+        if ($request->get('state') === OrderGroupStatusEnum::IN_PROGRESS->value) {
+            foreach ($request->get('orders') as $order) {
+                if ($order['status'] === OrderStatusEnum::ASSIGNED->value) {
+                    $processOrderStatusHookUseCase->handle(new OrderStatusDto(
+                        order_id: $request->get('id'),
+                        warehouse_order_id: $order['merchant_order_id'],
+                        status: OrderStatusEnum::from($order['status']),
+                    ));
+                }
+            }
         }
 
-        foreach ($request->get('orders') as $order) {
-            if ($order['status'] === OrderStatusEnum::ASSIGNED->value) {
-                $this->jobDispatcher->dispatch(
-                    new RaketaCreateOrderJob(
-                        $order['id'],
-                        $order['address'],
-                        $order['comment'],
-                        $order['price'],
-                        $order['point_a'],
-                        $order['point_b'],
-                        $order['status'],
-                        $order['transport_type']
-                    );
-            }
-        }*/
     }
 }

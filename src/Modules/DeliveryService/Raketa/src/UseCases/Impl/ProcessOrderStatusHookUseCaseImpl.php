@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\UseCases\Impl;
 
-use SmartDelivery\DeliveryService\Raketa\Dto\ProcessOrderStatusHookDto;
 use SmartDelivery\DeliveryService\Raketa\UseCases\ProcessOrderStatusHookUseCase;
+use SmartDelivery\HttpClients\SmartDeal\SmartDealHttpClientInterface;
+use SmartDelivery\HttpClients\SmartDeal\src\DTO\OrderStatusDto;
 
-final class ProcessOrderStatusHookUseCaseImpl implements ProcessOrderStatusHookUseCase
+final readonly class ProcessOrderStatusHookUseCaseImpl implements ProcessOrderStatusHookUseCase
 {
-    public function handle(ProcessOrderStatusHookDto $dto): void
+    public function __construct(
+        private SmartDealHttpClientInterface $httpClient
+    ) {}
+
+    public function handle(OrderStatusDto $dto): void
     {
-        // TODO: Implement handle() method.
+        $this->httpClient->sendOrderStatus($dto);
     }
 }
