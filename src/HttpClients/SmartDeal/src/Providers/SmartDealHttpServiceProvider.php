@@ -19,7 +19,7 @@ final class SmartDealHttpServiceProvider extends AppServiceProvider
     private const MODULE_PREFIX = 'smart-deal-http-client';
 
     private const CONFIGS = [
-        'base'
+        'base',
     ];
 
     public function register(): void
