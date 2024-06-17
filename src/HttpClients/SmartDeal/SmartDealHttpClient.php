@@ -9,17 +9,21 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Facades\Log;
 use SmartDelivery\HttpClients\Raketa\Entities\UnexpectedErrorException;
+use SmartDelivery\HttpClients\SmartDeal\Dto\OrderStatusDto;
 
-final class SmartDealHttpClient implements SmartDealHttpClientInterface
+final readonly class SmartDealHttpClient implements SmartDealHttpClientInterface
 {
+    private const SEND_COURIER_NAME = '/api-gate/v0/deliveries/groups';
+
     public function __construct(
         private Client $client,
+        private string $apiUrl
     ) {}
 
     public function sendOrderStatus(OrderStatusDto $dto): void
     {
         try {
-            $response = $this->client->request('POST', $this->apiUrl . self::CREATE_ORDER, [
+            $this->client->request('POST', $this->apiUrl . self::SEND_COURIER_NAME, [
                 RequestOptions::JSON => $dto->toArray(),
             ]);
         } catch (GuzzleException $e) {

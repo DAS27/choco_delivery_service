@@ -9,7 +9,7 @@ return [
 
     //Modules
     \SmartDelivery\HttpClients\Raketa\Providers\RaketaHttpServiceProvider::class,
-    \SmartDelivery\HttpClients\SmartDeal\src\Providers\SmartDealHttpServiceProvider::class,
+    \SmartDelivery\HttpClients\SmartDeal\Providers\SmartDealHttpServiceProvider::class,
     \SmartDelivery\DeliveryService\Raketa\Providers\RaketaServiceProvider::class,
     \SmartDelivery\DeliveryService\Main\Providers\DeliveryServiceMainServiceProvider::class,
     \SmartDelivery\Order\Providers\OrderServiceProvider::class,

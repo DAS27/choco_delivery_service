@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SmartDelivery\HttpClients\SmartDeal\src\Providers;
+namespace SmartDelivery\HttpClients\SmartDeal\Providers;
 
 use App\Providers\AppServiceProvider;
 use SmartDelivery\HttpClients\SmartDeal\SmartDealHttpClient;
@@ -16,15 +16,14 @@ final class SmartDealHttpServiceProvider extends AppServiceProvider
 
     private const CONFIGS_PATH = 'configs';
 
-    private const MODULE_PREFIX = 'raketa-http-client';
+    private const MODULE_PREFIX = 'smart-deal-http-client';
 
-    private const CONFIGS = [
-        'base'
-    ];
+    private const CONFIGS = [];
 
     public function register(): void
     {
         $this->registerConfigs();
+        $this->registerDI();
     }
 
     private function modulePath(string $path): string
@@ -41,5 +40,19 @@ final class SmartDealHttpServiceProvider extends AppServiceProvider
                 self::MODULE_PREFIX . ".{$config}"
             );
         }
+    }
+
+    private function registerDI(): void
+    {
+        $env = env('APP_ENV', 'production');
+
+        $apiUrl = match ($env) {
+            'local', 'staging' => config('smart-deal-http-client.base.dev.api_url'),
+            default => config('smart-deal-http-client.base.prod.token'),
+        };
+
+        $this->app->when(SmartDealHttpClient::class)
+            ->needs('$apiUrl')
+            ->give($apiUrl);
     }
 }

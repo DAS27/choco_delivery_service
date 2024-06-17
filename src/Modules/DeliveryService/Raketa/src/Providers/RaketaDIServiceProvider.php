@@ -11,8 +11,10 @@ use SmartDelivery\DeliveryService\Raketa\Repositories\Impl\OrderGroupRepositoryI
 use SmartDelivery\DeliveryService\Raketa\Repositories\OrderGroupRepository;
 use SmartDelivery\DeliveryService\Raketa\Service\CreateOrderGroupService;
 use SmartDelivery\DeliveryService\Raketa\Service\CreateOrderService;
+use SmartDelivery\DeliveryService\Raketa\Service\FindGroupOrderByOrderIdService;
 use SmartDelivery\DeliveryService\Raketa\Service\Impl\CreateOrderGroupServiceImpl;
 use SmartDelivery\DeliveryService\Raketa\Service\Impl\CreateOrderServiceImpl;
+use SmartDelivery\DeliveryService\Raketa\Service\Impl\FindGroupOrderByOrderIdServiceServiceImpl;
 use SmartDelivery\DeliveryService\Raketa\UseCases\CreateOrderUseCase;
 use SmartDelivery\DeliveryService\Raketa\UseCases\Impl\CreateOrderUseCaseImpl;
 
@@ -26,6 +28,7 @@ final class RaketaDIServiceProvider extends AppServiceProvider
         //Services
         CreateOrderService::class => CreateOrderServiceImpl::class,
         CreateOrderGroupService::class => CreateOrderGroupServiceImpl::class,
+        FindGroupOrderByOrderIdService::class => FindGroupOrderByOrderIdServiceServiceImpl::class,
 
         //Use Cases
         CreateOrderUseCase::class => CreateOrderUseCaseImpl::class,

@@ -9,8 +9,8 @@ use Spatie\LaravelData\Data;
 final class OrderGroupEntity extends Data
 {
     public function __construct(
-        public readonly string $order_id,
-        public readonly string $external_order_id,
+        public readonly int $order_id,
+        public readonly int $external_order_id,
         public readonly string $status,
     ) {}
 }

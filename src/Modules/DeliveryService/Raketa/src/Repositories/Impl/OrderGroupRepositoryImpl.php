@@ -29,4 +29,15 @@ final class OrderGroupRepositoryImpl implements OrderGroupRepository
     {
         return OrderGroupEntity::from($model->toArray());
     }
+
+    public function findByOrderId(int $orderId): ?OrderGroupEntity
+    {
+        /** @var RaketaOrderGroupModel $model */
+        $model = RaketaOrderGroupModel::query()->where('order_id', $orderId)->first();
+        if ($model === null) {
+            return null;
+        }
+
+        return $this->buildEntityFromModel($model);
+    }
 }
