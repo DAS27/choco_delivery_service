@@ -17,6 +17,8 @@ use SmartDelivery\DeliveryService\Raketa\Service\Impl\CreateOrderServiceImpl;
 use SmartDelivery\DeliveryService\Raketa\Service\Impl\FindGroupOrderByOrderIdServiceServiceImpl;
 use SmartDelivery\DeliveryService\Raketa\UseCases\CreateOrderUseCase;
 use SmartDelivery\DeliveryService\Raketa\UseCases\Impl\CreateOrderUseCaseImpl;
+use SmartDelivery\DeliveryService\Raketa\UseCases\Impl\SendCourierInfoUseCaseImpl;
+use SmartDelivery\DeliveryService\Raketa\UseCases\SendCourierInfoUseCase;
 
 final class RaketaDIServiceProvider extends AppServiceProvider
 {
@@ -32,5 +34,6 @@ final class RaketaDIServiceProvider extends AppServiceProvider
 
         //Use Cases
         CreateOrderUseCase::class => CreateOrderUseCaseImpl::class,
+        SendCourierInfoUseCase::class => SendCourierInfoUseCaseImpl::class,
     ];
 }

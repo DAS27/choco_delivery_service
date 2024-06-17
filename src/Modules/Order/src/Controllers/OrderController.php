@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 use SmartDelivery\Core\JobDispatcher\JobDispatcherInterface;
 use SmartDelivery\DeliveryService\Raketa\Enums\OrderStatusEnum;
-use SmartDelivery\DeliveryService\Raketa\UseCases\ProcessOrderStatusHookUseCase;
+use SmartDelivery\DeliveryService\Raketa\UseCases\SendCourierInfoUseCase;
 use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
+use SmartDelivery\HttpClients\SmartDeal\Dto\OrderStatusDto;
 use SmartDelivery\Main\Controllers\AbstractController;
 use SmartDelivery\Order\Dto\RequestOrderDto;
 use SmartDelivery\Order\Jobs\CreateOrderJob;
@@ -49,7 +50,7 @@ final class OrderController extends AbstractController
     }
     public function orderStatusHook(
         Request $request,
-        ProcessOrderStatusHookUseCase $processOrderStatusHookUseCase,
+        SendCourierInfoUseCase $sendCourierInfoUseCase,
         LoggerInterface $logger
     ):void {
         $logger->info('[RaketaController] Incoming order status hook', $request->all());
@@ -57,10 +58,8 @@ final class OrderController extends AbstractController
         if ($request->get('state') === OrderGroupStatusEnum::IN_THE_WAY->value) {
             foreach ($request->get('orders') as $order) {
                 if ($order['status'] === OrderStatusEnum::ASSIGNED->value) {
-                    $processOrderStatusHookUseCase->handle(new OrderStatusDto(
-                        order_id: $request->get('id'),
-                        warehouse_order_id: $order['merchant_order_id'],
-                        status: OrderStatusEnum::from($order['status']),
+                    $sendCourierInfoUseCase->handle(new OrderStatusDto(
+                        order_id: (int) $request->get('id')
                     ));
                 }
             }
