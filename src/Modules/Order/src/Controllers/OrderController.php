@@ -37,13 +37,13 @@ final class OrderController extends AbstractController
                     order_id: (int) $request->get('order_id'),
                     merchant_name: $request->get('merchant_name'),
                     warehouse_order_id: (int) $request->get('all_style_order_id'),
-                    recipient_phone: $request->get('phone_2'),
-                    sender_phone: $request->get('phone_1'),
-                    delivery_address: $request->get('address'),
+                    recipient_phone: $request->get('recipient_phone'),
+                    sender_phone: $request->get('sender_phone'),
+                    delivery_address: $request->get('delivery_address'),
                     delivery_service_name: $request->get('delivery_service_name'),
                     order_created_at: $request->get('created_at'),
                     total_amount: $request->get('total_amount'),
-                    items: $request->get('products'),
+                    items: $request->get('items'),
                     order_planned_at: $request->get('planned_at'),
                 )
             )
