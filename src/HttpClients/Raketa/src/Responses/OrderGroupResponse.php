@@ -11,7 +11,5 @@ final class OrderGroupResponse
     public function __construct(
         public int $group_id,
         public OrderGroupStatusEnum $status,
-        /** @var OrderResponse[] */
-        public array $orders
     ) {}
 }

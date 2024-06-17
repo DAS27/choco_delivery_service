@@ -90,21 +90,6 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
             return new OrderGroupResponse(
                 group_id: $responseBodyArr['group_detail']['id'],
                 status: OrderGroupStatusEnum::tryFrom((string) $responseBodyArr['group_detail']['state']),
-                orders: array_map(
-                    fn ($order) => new OrderResponse(
-                        id: $order['id'],
-                        status: $order['status'],
-                        price: (string) $order['price'],
-                        sms_code: $order['sms_code'],
-                        merchant_order_id: (int) $order['merchant_order_id'],
-                        tracking_short_link: $order['tracking_short_link'],
-                        tracking_uuid: $order['tracking_uuid'],
-                        courier_name: $order['courier_name'],
-                        courier_phone: $order['courier_phone'],
-                        was_returned: $order['was_returned'],
-                    ),
-                    $responseBodyArr['group_detail']['orders']
-                )
             );
         } catch (Throwable $e) {
             Log::critical('Request params', $formParams);
