@@ -8,5 +8,5 @@ use SmartDelivery\HttpClients\SmartDeal\Dto\CourierInfoDto;
 
 interface SmartDealHttpClientInterface
 {
-    public function sendOrderStatus(CourierInfoDto $dto): void;
+    public function sendCourierInfo(CourierInfoDto $courierInfoDto): void;
 }

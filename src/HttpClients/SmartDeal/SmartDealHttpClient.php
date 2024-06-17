@@ -13,21 +13,23 @@ use SmartDelivery\HttpClients\SmartDeal\Dto\CourierInfoDto;
 
 final readonly class SmartDealHttpClient implements SmartDealHttpClientInterface
 {
-    private const SEND_COURIER_NAME = "/api/orders/{orderId}/assign-courier";
+    private const SEND_COURIER_NAME = "/api/orders/%s/assign-courier";
 
     public function __construct(
         private Client $client,
         private string $apiUrl
     ) {}
 
-    public function sendOrderStatus(CourierInfoDto $dto): void
+    public function sendCourierInfo(CourierInfoDto $courierInfoDto): void
     {
         try {
-            $this->client->request('POST', $this->apiUrl . self::SEND_COURIER_NAME, [
-                RequestOptions::JSON => $dto->toArray(),
+            $url = sprintf($this->apiUrl . self::SEND_COURIER_NAME, $courierInfoDto->external_order_id);
+
+            $this->client->request('POST', $url, [
+                RequestOptions::JSON => $courierInfoDto->toArray(),
             ]);
         } catch (GuzzleException $e) {
-            Log::critical('Request params', $dto->toArray());
+            Log::critical('Request params', $courierInfoDto->toArray());
             throw new UnexpectedErrorException($e->getMessage(), 0, $e);
         }
     }

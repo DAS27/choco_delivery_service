@@ -6,6 +6,7 @@ namespace SmartDelivery\Order\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use JetBrains\PhpStorm\NoReturn;
 use Psr\Log\LoggerInterface;
 use SmartDelivery\Core\JobDispatcher\JobDispatcherInterface;
 use SmartDelivery\DeliveryService\Raketa\Enums\OrderStatusEnum;
@@ -48,13 +49,14 @@ final class OrderController extends AbstractController
 
         return $this->sendResponse(['message' => 'Ok']);
     }
-    public function orderStatusHook(
+    #[NoReturn] public function orderStatusHook(
         Request $request,
         SendCourierInfoUseCase $sendCourierInfoUseCase,
         LoggerInterface $logger
     ):void {
         $logger->info('[RaketaController] Incoming order status hook', $request->all());
 
+        dd($request->all());
         if ($request->get('state') === OrderGroupStatusEnum::IN_THE_WAY->value) {
             foreach ($request->get('orders') as $order) {
                 if ($order['status'] === OrderStatusEnum::ASSIGNED->value) {

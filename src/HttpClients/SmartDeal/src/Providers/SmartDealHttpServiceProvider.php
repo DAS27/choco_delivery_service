@@ -49,7 +49,7 @@ final class SmartDealHttpServiceProvider extends AppServiceProvider
         $env = env('APP_ENV', 'production');
 
         $apiUrl = match ($env) {
-            'local', 'staging' => config('smart-deal-http-client.base.dev.api_url'),
+            'local' => config('smart-deal-http-client.base.dev.api_url'),
             default => config('smart-deal-http-client.base.api_url'),
         };
 

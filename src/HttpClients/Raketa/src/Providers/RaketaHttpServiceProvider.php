@@ -58,17 +58,17 @@ final class RaketaHttpServiceProvider extends AppServiceProvider
         $env = env('APP_ENV', 'production');
 
         $token = match ($env) {
-            'local', 'staging' => config('raketa-http-client.base.dev.token'),
+            'local' => config('raketa-http-client.base.dev.token'),
             default => config('raketa-http-client.base.prod.token'),
         };
 
         $refreshToken = match ($env) {
-            'local', 'staging' => config('raketa-http-client.base.dev.refresh_token'),
+            'local' => config('raketa-http-client.base.dev.refresh_token'),
             default => config('raketa-http-client.base.prod.token'),
         };
 
         $apiUrl = match ($env) {
-            'local', 'staging' => config('raketa-http-client.base.dev.api_url'),
+            'local' => config('raketa-http-client.base.dev.api_url'),
             default => config('raketa-http-client.base.prod.token'),
         };
 
