@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\UseCases\Impl;
 
-use Illuminate\Support\Facades\Log;
 use SmartDelivery\DeliveryService\Main\Contracts\CreateOrderContract;
 use SmartDelivery\DeliveryService\Main\Dto\CreateExternalOrderDto;
 use SmartDelivery\DeliveryService\Main\Dto\WarehouseTypeEnum;
@@ -15,13 +14,9 @@ use SmartDelivery\DeliveryService\Raketa\Dto\OrderGroupDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\PointDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\ProductDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\TaskDto;
-use SmartDelivery\DeliveryService\Raketa\Entities\OrderGroupEntity;
-use SmartDelivery\DeliveryService\Raketa\Enums\OrderGroupStatusEnum;
 use SmartDelivery\DeliveryService\Raketa\Service\CreateOrderGroupService;
-use SmartDelivery\HttpClients\Raketa\Entities\UnexpectedErrorException;
 use SmartDelivery\HttpClients\Raketa\Enums\TransportTypeEnum;
 use SmartDelivery\HttpClients\Raketa\RaketaHttpClientInterface;
-use Throwable;
 
 final readonly class RaketaOrderContractImpl implements CreateOrderContract
 {
@@ -62,7 +57,7 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
                     (fn(PointDto $point) => $point->toArray()),
                     array_merge($startPoint, [$finalPoint])
                 ),
-                callbackUrl: "https://67c4-46-235-72-49.ngrok-free.app",
+                callbackUrl: "https://b6e3-89-107-100-5.ngrok-free.app",
                 orderPlannedAt: $externalOrderDto->order_planned_at
             )
         );

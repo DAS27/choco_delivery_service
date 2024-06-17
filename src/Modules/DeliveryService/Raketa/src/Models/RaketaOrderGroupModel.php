@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\Models;
 
-use SmartDelivery\DeliveryService\Raketa\Enums\OrderGroupStatusEnum;
+use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
 use SmartDelivery\Main\Models\AbstractStringableModel;
 
 /**
@@ -14,7 +14,7 @@ use SmartDelivery\Main\Models\AbstractStringableModel;
  */
 final class RaketaOrderGroupModel extends AbstractStringableModel
 {
-    protected $table = 'raketa_order-groups';
+    protected $table = 'raketa_order_groups';
 
     protected $fillable = [
         'order_id',

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('raketa_orders', function (Blueprint $table) {
+        Schema::create('raketa_order_groups', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('order_id');
             $table->string('external_order_id');

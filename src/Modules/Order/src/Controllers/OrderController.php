@@ -8,10 +8,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
 use SmartDelivery\Core\JobDispatcher\JobDispatcherInterface;
-use SmartDelivery\DeliveryService\Raketa\Enums\OrderGroupStatusEnum;
 use SmartDelivery\DeliveryService\Raketa\Enums\OrderStatusEnum;
 use SmartDelivery\DeliveryService\Raketa\UseCases\CreateOrderUseCase;
 use SmartDelivery\DeliveryService\Raketa\UseCases\ProcessOrderStatusHookUseCase;
+use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
 use SmartDelivery\HttpClients\SmartDeal\src\DTO\OrderStatusDto;
 use SmartDelivery\Main\Controllers\AbstractController;
 use SmartDelivery\Order\Dto\RequestOrderDto;
@@ -52,7 +52,7 @@ final class OrderController extends AbstractController
     ):void {
         $logger->info('[RaketaController] Incoming order status hook', $request->all());
 
-        if ($request->get('state') === OrderGroupStatusEnum::IN_PROGRESS->value) {
+        if ($request->get('state') === OrderGroupStatusEnum::IN_THE_WAY->value) {
             foreach ($request->get('orders') as $order) {
                 if ($order['status'] === OrderStatusEnum::ASSIGNED->value) {
                     $processOrderStatusHookUseCase->handle(new OrderStatusDto(
