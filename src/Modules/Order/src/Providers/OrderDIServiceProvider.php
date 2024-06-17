@@ -11,7 +11,9 @@ use SmartDelivery\Order\Repositories\OrderItemRepository;
 use SmartDelivery\Order\Repositories\OrderRepository;
 use SmartDelivery\Order\Services\CreateOrderService;
 use SmartDelivery\Order\Services\Impl\CreateOrderServiceImpl;
+use SmartDelivery\Order\UseCases\CancelOrderUseCase;
 use SmartDelivery\Order\UseCases\CreateOrderUseCase;
+use SmartDelivery\Order\UseCases\Impl\CancelOrderUseCaseImpl;
 use SmartDelivery\Order\UseCases\Impl\CreateOrderUseCaseImpl;
 
 final class OrderDIServiceProvider extends AppServiceProvider
@@ -26,5 +28,6 @@ final class OrderDIServiceProvider extends AppServiceProvider
 
         //Use Cases
         CreateOrderUseCase::class => CreateOrderUseCaseImpl::class,
+        CancelOrderUseCase::class => CancelOrderUseCaseImpl::class,
     ];
 }

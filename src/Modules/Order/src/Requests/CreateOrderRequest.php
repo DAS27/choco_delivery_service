@@ -6,7 +6,7 @@ namespace SmartDelivery\Order\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class OrderRequest extends FormRequest
+final class CreateOrderRequest extends FormRequest
 {
     public function authorize(): bool
     {

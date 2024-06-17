@@ -11,6 +11,6 @@ interface RaketaHttpClientInterface
 {
     public function createOrder(CreateOrderDto $createOrderDto): OrderGroupResponse;
 
-    public function cancelOrder(string $orderId): void;
+    public function cancelOrder(int $orderId): void;
 
 }

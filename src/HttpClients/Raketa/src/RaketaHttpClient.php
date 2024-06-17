@@ -14,7 +14,6 @@ use SmartDelivery\HttpClients\Raketa\Entities\AccessTokenEntity;
 use SmartDelivery\HttpClients\Raketa\Entities\UnexpectedErrorException;
 use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
 use SmartDelivery\HttpClients\Raketa\Responses\OrderGroupResponse;
-use SmartDelivery\HttpClients\Raketa\Responses\OrderResponse;
 use SmartDelivery\HttpClients\Raketa\Services\GetAccessTokenService;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -95,14 +94,41 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
         }
     }
 
-    public function getOrderDetail(string $orderId): OrderResponse
+    public function cancelOrder(int $orderId): void
     {
-        // TODO: Implement getOrderDetail() method.
-    }
+        $formParams = [
+            'orders' => [
+                'id' => $orderId
+            ]
+        ];
 
-    public function cancelOrder(string $orderId): void
-    {
-        // TODO: Implement cancelOrder() method.
+        try {
+            $response = $this->client->request('POST', $this->apiUrl . self::CANCEL_ORDER, [
+                RequestOptions::JSON => $formParams,
+                'headers' => $this->getHeaders()
+            ]);
+        } catch (GuzzleException $e) {
+            Log::critical('Request params', $formParams);
+            throw new UnexpectedErrorException($e->getMessage(), 0, $e);
+        }
+        try {
+            $this->validateResponse($response);
+        } catch (UnexpectedErrorException $e) {
+            Log::critical('Request params', $formParams);
+            throw  $e;
+        }
+
+        try {
+            $responseBody = $response->getBody()->getContents();
+            $responseBodyArr = json_decode($responseBody, true);
+
+            if (isset($responseBodyArr['detail']) && $responseBodyArr['detail'] !== 'Ok') {
+                throw new UnexpectedErrorException($responseBodyArr['detail']);
+            }
+        } catch (Throwable $e) {
+            Log::critical('Request params', $formParams);
+            throw new UnexpectedErrorException($e->getMessage(), 0, $e);
+        }
     }
 
     private function removeNullValues(array $array): array

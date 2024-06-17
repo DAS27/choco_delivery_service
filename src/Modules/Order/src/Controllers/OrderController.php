@@ -16,6 +16,8 @@ use SmartDelivery\HttpClients\SmartDeal\Dto\OrderStatusDto;
 use SmartDelivery\Main\Controllers\AbstractController;
 use SmartDelivery\Order\Dto\RequestOrderDto;
 use SmartDelivery\Order\Jobs\CreateOrderJob;
+use SmartDelivery\Order\Requests\CancelOrderRequest;
+use SmartDelivery\Order\Requests\CreateOrderRequest;
 
 final class OrderController extends AbstractController
 {
@@ -24,7 +26,7 @@ final class OrderController extends AbstractController
     ) {}
 
     public function createOrder(
-        Request $request,
+        CreateOrderRequest $request,
         LoggerInterface $logger
     ): JsonResponse {
         $logger->info('[OrderController] Incoming create order request', $request->all());
@@ -49,6 +51,16 @@ final class OrderController extends AbstractController
 
         return $this->sendResponse(['message' => 'Ok']);
     }
+
+    public function cancelOrder(
+        CancelOrderRequest $request,
+        LoggerInterface $logger
+    ): JsonResponse {
+        $logger->info('[OrderController] Incoming cancel order request', $request->all());
+
+        return $this->sendResponse(['message' => 'Ok']);
+    }
+
     #[NoReturn] public function orderStatusHook(
         Request $request,
         SendCourierInfoUseCase $sendCourierInfoUseCase,
@@ -69,6 +81,5 @@ final class OrderController extends AbstractController
                 }
             }
         }
-
     }
 }
