@@ -18,7 +18,9 @@ final class SmartDealHttpServiceProvider extends AppServiceProvider
 
     private const MODULE_PREFIX = 'smart-deal-http-client';
 
-    private const CONFIGS = [];
+    private const CONFIGS = [
+        'base'
+    ];
 
     public function register(): void
     {
@@ -48,7 +50,7 @@ final class SmartDealHttpServiceProvider extends AppServiceProvider
 
         $apiUrl = match ($env) {
             'local', 'staging' => config('smart-deal-http-client.base.dev.api_url'),
-            default => config('smart-deal-http-client.base.prod.token'),
+            default => config('smart-deal-http-client.base.api_url'),
         };
 
         $this->app->when(SmartDealHttpClient::class)
