@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SmartDelivery\Main\Jobs;
 
 use Psr\Log\LoggerInterface;
-use Throwable;
 use SmartDelivery\Core\JobDispatcher\BaseJob;
+use Throwable;
 
 abstract class AbstractJob extends BaseJob
 {

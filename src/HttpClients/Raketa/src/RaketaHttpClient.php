@@ -10,7 +10,6 @@ use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 use SmartDelivery\DeliveryService\Raketa\Dto\CreateOrderDto;
-use SmartDelivery\DeliveryService\Raketa\Dto\PointDto;
 use SmartDelivery\HttpClients\Raketa\Entities\AccessTokenEntity;
 use SmartDelivery\HttpClients\Raketa\Entities\UnexpectedErrorException;
 use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
@@ -23,7 +22,6 @@ use Throwable;
 final readonly class RaketaHttpClient implements RaketaHttpClientInterface
 {
     private const CREATE_ORDER = '/api-gate/v0/deliveries/groups';
-    private const GET_ORDER_DETAIL = '/api-gate/v0/deliveries/groups/group_id';
     private const CANCEL_ORDER = '/api-gate/v0/deliveries/cancel-group/group_id';
 
     public function __construct(
