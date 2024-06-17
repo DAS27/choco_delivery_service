@@ -6,5 +6,5 @@ namespace SmartDelivery\DeliveryService\Main\Enums;
 
 enum DeliveryServiceEnum:string
 {
-    case RAKETA = 'Raketa';
+    case RAKETA = 'raketa';
 }

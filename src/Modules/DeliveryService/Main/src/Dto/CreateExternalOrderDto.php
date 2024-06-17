@@ -14,12 +14,13 @@ final class CreateExternalOrderDto extends Data
     public function __construct(
         public int $external_order_id,
         public int $warehouse_order_id,
-        public string $phone,
-        public AddressDto $address,
+        public string $recipient_phone,
+        public string $sender_phone,
+        public AddressDto $delivery_address,
         public DeliveryServiceEnum $serviceEnum,
         public string $order_created_at,
         /** @var ProductDto[] */
-        public array $products,
+        public array $items,
         public ?string $total_amount,
         public ?string $order_planned_at = null,
     ) {}

@@ -11,12 +11,13 @@ use SmartDelivery\Order\Enums\OrderStatusEnum;
 
 /**
  * @property string $id
- * @property int $merchant_id
+ * @property string $merchant_name
  * @property int $external_order_id
  * @property string $delivery_service_name
  * @property string $delivery_address
  * @property string $warehouse_type
- * @property string $phone
+ * @property string $recipient_phone
+ * @property string $sender_phone
  * @property string $scheduled_delivery_time
  * @property string $status
  * @property string $total_amount

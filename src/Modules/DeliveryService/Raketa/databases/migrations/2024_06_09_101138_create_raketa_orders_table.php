@@ -16,14 +16,8 @@ return new class extends Migration
         Schema::create('raketa_orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('order_id');
-            $table->string('warehouse_order_id')->nullable();
-            $table->string('phone');
-            $table->json('address');
-            $table->string('delivery_service_name');
-            $table->string('order_planned_at')->nullable();
-            $table->string('order_created_at');
-            $table->string('total_amount');
-            $table->json('products');
+            $table->string('external_order_id');
+            $table->string('status');
             $table->timestamps();
         });
     }

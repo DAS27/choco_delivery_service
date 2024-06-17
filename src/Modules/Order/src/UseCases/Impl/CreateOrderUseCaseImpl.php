@@ -29,11 +29,12 @@ final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
             new CreateExternalOrderDto(
                 external_order_id: $dto->order_id,
                 warehouse_order_id: $dto->warehouse_order_id,
-                phone: $dto->phone,
-                address: AddressDto::from($dto->address),
+                recipient_phone: $dto->recipient_phone,
+                sender_phone: $dto->sender_phone,
+                delivery_address: AddressDto::from($dto->delivery_address),
                 serviceEnum: DeliveryServiceEnum::from($dto->delivery_service_name),
                 order_created_at: $dto->order_created_at,
-                products: array_map(function (array $product) {
+                items: array_map(function (array $product) {
                     return new ProductDto(
                         title: $product['title'],
                         price: (int) $product['price'],
@@ -41,7 +42,7 @@ final readonly class CreateOrderUseCaseImpl implements CreateOrderUseCase
                         address: AddressDto::from($product['address']),
                         warehouse_type: WarehouseTypeEnum::from($product['warehouse_type'])
                     );
-                }, $dto->products),
+                }, $dto->items),
                 total_amount: $dto->total_amount,
                 order_planned_at: $dto->order_planned_at,
             )

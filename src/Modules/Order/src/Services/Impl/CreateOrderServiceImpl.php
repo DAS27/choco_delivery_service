@@ -23,17 +23,17 @@ final readonly class CreateOrderServiceImpl implements CreateOrderService
     {
         $orderEntity = $this->orderRepository->store($dto);
 
-        foreach ($dto->products as $product) {
+        foreach ($dto->items as $item) {
             $this->orderItemRepository->store(new OrderItemDto(
                 order_id: $orderEntity->id,
                 warehouse_order_id: $dto->warehouse_order_id,
                 address: new AddressDto(
-                    street: Arr::get($product['address'], 'street'),
-                    building: Arr::get($product['address'], 'building'),
-                    extra_info: Arr::get($product['address'], 'comment', '-')),
-                title: $product['title'],
-                quantity: $product['count'],
-                price: $product['price'],
+                    street: Arr::get($item['address'], 'street'),
+                    building: Arr::get($item['address'], 'building'),
+                    extra_info: Arr::get($item['address'], 'comment', '-')),
+                title: $item['title'],
+                quantity: $item['count'],
+                price: $item['price'],
             ));
         }
     }

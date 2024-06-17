@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('merchant_id');
+            $table->string('merchant_name');
             $table->string('external_order_id');
             $table->string('delivery_service_name');
             $table->json('delivery_address');
-            $table->string('phone');
+            $table->string('sender_phone');
+            $table->string('recipient_phone');
             $table->string('scheduled_delivery_time')->nullable();
             $table->string('status');
             $table->string('total_amount');

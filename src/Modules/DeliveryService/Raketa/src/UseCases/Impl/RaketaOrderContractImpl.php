@@ -25,13 +25,13 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
     public function handle(CreateExternalOrderDto $externalOrderDto): void
     {
         $finalPoint = new PointDto(
-            contact_info: new ContactInfoDto(phone_number: $externalOrderDto->phone),
-            address: $externalOrderDto->address,
+            contact_info: new ContactInfoDto(phone_number: $externalOrderDto->recipient_phone),
+            address: $externalOrderDto->delivery_address,
         );
 
         $startPoint = array_map(function (ProductDto $productDto) use ($externalOrderDto) {
             return new PointDto(
-                contact_info: new ContactInfoDto(phone_number: $externalOrderDto->phone),
+                contact_info: new ContactInfoDto(phone_number: $externalOrderDto->sender_phone),
                 address: $productDto->address,
                 items: [new ProductDto(
                     title: $productDto->title,
@@ -42,10 +42,10 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
                 )],
                 merchant_order_id: $externalOrderDto->warehouse_order_id,
                 tasks: [new TaskDto(
-                    id: $productDto->warehouse_type === WarehouseTypeEnum::ALL_STYLE ? 11398 : null,
+                    id: $productDto->warehouse_type === WarehouseTypeEnum::EXTERNAL ? 11398 : null,
                 )]
             );
-        }, $externalOrderDto->products);
+        }, $externalOrderDto->items);
 
         $response = $this->httpClient->createOrder(
             new CreateOrderDto(
@@ -58,6 +58,8 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
                 orderPlannedAt: $externalOrderDto->order_planned_at
             )
         );
+
+
     }
 
     public function getProvider(): DeliveryServiceEnum

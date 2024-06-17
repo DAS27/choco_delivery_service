@@ -19,11 +19,12 @@ final class OrderRepositoryImpl implements OrderRepository
     {
         $model = new OrderModel();
         $model->id = Uuid::uuid4()->toString();
-        $model->merchant_id = $dto->merchant_id;
+        $model->merchant_name = $dto->merchant_name;
         $model->external_order_id = $dto->order_id;
         $model->delivery_service_name = $dto->delivery_service_name;
-        $model->delivery_address = $dto->address;
-        $model->phone = $dto->phone;
+        $model->delivery_address = $dto->delivery_address;
+        $model->recipient_phone = $dto->recipient_phone;
+        $model->sender_phone = $dto->sender_phone;
         $model->scheduled_delivery_time = $dto->order_planned_at ?: null;
         $model->status = OrderStatusEnum::NEW->value;
         $model->total_amount = $dto->total_amount;
@@ -36,12 +37,13 @@ final class OrderRepositoryImpl implements OrderRepository
     {
         return new OrderEntity(
             id: $model->id,
-            merchant_id: $model->merchant_id,
+            merchant_name: $model->merchant_name,
             external_order_id: $model->external_order_id,
-            delivery_service_name: $model->delivery_service_name,
-            address: AddressDto::from($model->delivery_address),
-            phone: $model->phone,
-            status: $model->status,
+            delivery_service_name: DeliveryServiceEnum::from($model->delivery_service_name->value),
+            delivery_address: AddressDto::from($model->delivery_address),
+            recipient_phone: $model->recipient_phone,
+            sender_phone: $model->sender_phone,
+            status: OrderStatusEnum::from($model->status->value),
             total_amount: $model->total_amount,
             scheduled_delivery_time: $model->scheduled_delivery_time,
         );

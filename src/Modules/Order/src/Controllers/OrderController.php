@@ -30,15 +30,16 @@ final class OrderController extends AbstractController
         $logger->info('[OrderController] Incoming create order request', $request->all());
 
         $createOrderUseCase->handle(new RequestOrderDto(
-            order_id: $request->get('order_id'),
-            merchant_id: $request->get('merchant_id'),
-            warehouse_order_id: $request->get('all_style_order_id'),
-            phone: $request->get('phone'),
-            address: $request->get('address'),
+            order_id: (int) $request->get('order_id'),
+            merchant_name: $request->get('merchant_name'),
+            warehouse_order_id: (int) $request->get('all_style_order_id'),
+            recipient_phone: $request->get('phone_2'),
+            sender_phone: $request->get('phone_1'),
+            delivery_address: $request->get('address'),
             delivery_service_name: $request->get('delivery_service_name'),
             order_created_at: $request->get('created_at'),
             total_amount: $request->get('total_amount'),
-            products: $request->get('products'),
+            items: $request->get('products'),
             order_planned_at: $request->get('planned_at'),
         ));
 
