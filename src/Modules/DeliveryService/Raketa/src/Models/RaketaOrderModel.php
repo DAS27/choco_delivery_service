@@ -17,7 +17,7 @@ use SmartDelivery\Main\Models\AbstractModel;
  * @property string $total_amount
  * @property array $products
  */
-final class RaketaModel extends AbstractModel
+final class RaketaOrderModel extends AbstractModel
 {
     protected $table = 'raketa_orders';
 

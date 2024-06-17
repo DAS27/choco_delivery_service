@@ -4,22 +4,29 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\UseCases\Impl;
 
+use Illuminate\Support\Facades\Log;
 use SmartDelivery\DeliveryService\Main\Contracts\CreateOrderContract;
 use SmartDelivery\DeliveryService\Main\Dto\CreateExternalOrderDto;
 use SmartDelivery\DeliveryService\Main\Dto\WarehouseTypeEnum;
 use SmartDelivery\DeliveryService\Main\Enums\DeliveryServiceEnum;
 use SmartDelivery\DeliveryService\Raketa\Dto\ContactInfoDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\CreateOrderDto;
+use SmartDelivery\DeliveryService\Raketa\Dto\OrderGroupDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\PointDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\ProductDto;
 use SmartDelivery\DeliveryService\Raketa\Dto\TaskDto;
+use SmartDelivery\DeliveryService\Raketa\Enums\OrderGroupStatusEnum;
+use SmartDelivery\DeliveryService\Raketa\Service\CreateOrderGroupService;
+use SmartDelivery\HttpClients\Raketa\Entities\UnexpectedErrorException;
 use SmartDelivery\HttpClients\Raketa\Enums\TransportTypeEnum;
 use SmartDelivery\HttpClients\Raketa\RaketaHttpClientInterface;
+use Throwable;
 
 final readonly class RaketaOrderContractImpl implements CreateOrderContract
 {
     public function __construct(
         private RaketaHttpClientInterface $httpClient,
+        private CreateOrderGroupService $createOrderGroupService
     ) {}
 
     public function handle(CreateExternalOrderDto $externalOrderDto): void
@@ -47,19 +54,34 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
             );
         }, $externalOrderDto->items);
 
-        $response = $this->httpClient->createOrder(
-            new CreateOrderDto(
-                transportType: TransportTypeEnum::CAR,
-                points: array_map(
-                    (fn(PointDto $point) => $point->toArray()),
-                    array_merge($startPoint, [$finalPoint])
-                ),
-                callbackUrl: "https://67c4-46-235-72-49.ngrok-free.app",
-                orderPlannedAt: $externalOrderDto->order_planned_at
-            )
+
+        $externalDto = new CreateOrderDto(
+            transportType: TransportTypeEnum::CAR,
+            points: array_map(
+                (fn(PointDto $point) => $point->toArray()),
+                array_merge($startPoint, [$finalPoint])
+            ),
+            callbackUrl: "https://67c4-46-235-72-49.ngrok-free.app",
+            orderPlannedAt: $externalOrderDto->order_planned_at
         );
 
+        $response = $this->httpClient->createOrder($externalDto);
 
+        try {
+            $responseBody = $response->getBody()->getContents();
+            $responseBodyArr = json_decode($responseBody, true);
+
+            $this->createOrderGroupService->handle(
+                new OrderGroupDto(
+                    order_id: $responseBodyArr['id'],
+                    external_order_id: $externalOrderDto->external_order_id,
+                    status: OrderGroupStatusEnum::from($responseBodyArr['status']),
+                )
+            );
+        } catch (Throwable $e) {
+            Log::critical('Request params', $externalDto->toArray());
+            throw new UnexpectedErrorException($e->getMessage(), 0, $e);
+        }
     }
 
     public function getProvider(): DeliveryServiceEnum
