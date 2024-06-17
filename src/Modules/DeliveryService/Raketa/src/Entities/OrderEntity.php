@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SmartDelivery\DeliveryService\Raketa\Entities;
 
-use SmartDelivery\HttpClients\Raketa\Enums\OrderStatusEnum;
+use SmartDelivery\DeliveryService\Raketa\Enums\OrderStatusEnum;
 use Spatie\LaravelData\Data;
 
 final class OrderEntity extends Data

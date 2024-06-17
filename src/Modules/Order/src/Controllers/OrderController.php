@@ -56,12 +56,15 @@ final class OrderController extends AbstractController
     ):void {
         $logger->info('[RaketaController] Incoming order status hook', $request->all());
 
-        dd($request->all());
         if ($request->get('state') === OrderGroupStatusEnum::IN_THE_WAY->value) {
             foreach ($request->get('orders') as $order) {
                 if ($order['status'] === OrderStatusEnum::ASSIGNED->value) {
                     $sendCourierInfoUseCase->handle(new OrderStatusDto(
-                        order_id: (int) $request->get('id')
+                        order_id: (int) $request->get('id'),
+                        external_order_id: (int) $order['merchant_order_id'],
+                        status: OrderStatusEnum::tryFrom($request->get('state')),
+                        courier_name: $request->get('courier_name'),
+                        courier_phone: $request->get('courier_phone'),
                     ));
                 }
             }
