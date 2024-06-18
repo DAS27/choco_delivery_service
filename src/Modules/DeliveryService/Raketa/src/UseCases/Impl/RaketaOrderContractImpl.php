@@ -57,7 +57,7 @@ final readonly class RaketaOrderContractImpl implements CreateOrderContract
                     (fn(PointDto $point) => $point->toArray()),
                     array_merge($startPoint, [$finalPoint])
                 ),
-                callbackUrl: "https://ba4f-94-247-135-103.ngrok-free.app",
+                callbackUrl: route('status-hook.order'),
                 orderPlannedAt: $externalOrderDto->order_planned_at
             )
         );
