@@ -10,6 +10,7 @@ use JetBrains\PhpStorm\NoReturn;
 use Psr\Log\LoggerInterface;
 use SmartDelivery\Core\JobDispatcher\JobDispatcherInterface;
 use SmartDelivery\DeliveryService\Raketa\Enums\OrderStatusEnum;
+use SmartDelivery\DeliveryService\Raketa\UseCases\Impl\RaketaCancelOrderContractImpl;
 use SmartDelivery\DeliveryService\Raketa\UseCases\SendCourierInfoUseCase;
 use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
 use SmartDelivery\HttpClients\SmartDeal\Dto\OrderStatusDto;
@@ -18,6 +19,7 @@ use SmartDelivery\Order\Dto\RequestOrderDto;
 use SmartDelivery\Order\Jobs\CreateOrderJob;
 use SmartDelivery\Order\Requests\CancelOrderRequest;
 use SmartDelivery\Order\Requests\CreateOrderRequest;
+use Throwable;
 
 final class OrderController extends AbstractController
 {
@@ -54,9 +56,18 @@ final class OrderController extends AbstractController
 
     public function cancelOrder(
         CancelOrderRequest $request,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        RaketaCancelOrderContractImpl $raketaCancelOrder
     ): JsonResponse {
         $logger->info('[OrderController] Incoming cancel order request', $request->all());
+
+        try {
+            $raketaCancelOrder->handle($request->get('order_id'));
+        } catch (Throwable $e) {
+            $logger->critical(['[OrderController] Failed to cancel order', 'exception' => $e->getMessage()]);
+
+            throw $e;
+        }
 
         return $this->sendResponse(['message' => 'Ok']);
     }
@@ -66,7 +77,7 @@ final class OrderController extends AbstractController
         SendCourierInfoUseCase $sendCourierInfoUseCase,
         LoggerInterface $logger
     ):void {
-        $logger->info('[RaketaController] Incoming order status hook', $request->all());
+        $logger->info('[OrderController] Incoming order status hook', $request->all());
 
         if ($request->get('state') === OrderGroupStatusEnum::IN_THE_WAY->value) {
             foreach ($request->get('orders') as $order) {

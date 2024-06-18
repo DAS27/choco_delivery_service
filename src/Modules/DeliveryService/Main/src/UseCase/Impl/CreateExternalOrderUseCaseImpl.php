@@ -7,6 +7,7 @@ namespace SmartDelivery\DeliveryService\Main\UseCase\Impl;
 use Psr\Log\LoggerInterface;
 use SmartDelivery\DeliveryService\Main\Contracts\Exceptions\CreateExternalOrderException;
 use SmartDelivery\DeliveryService\Main\Dto\CreateExternalOrderDto;
+use SmartDelivery\DeliveryService\Main\Exceptions\UnknownDeliveryServiceTypeException;
 use SmartDelivery\DeliveryService\Main\Factories\DeliveryServiceProviderFactory;
 use SmartDelivery\DeliveryService\Main\UseCase\CreateExternalOrderUseCase;
 
@@ -20,15 +21,17 @@ final readonly class CreateExternalOrderUseCaseImpl implements CreateExternalOrd
     public function handle(CreateExternalOrderDto $dto): void
     {
         try {
-            $createContract = $this->deliveryServiceProviderFactory->buildIssueContract($dto->serviceEnum);
+            $createContract = $this->deliveryServiceProviderFactory->buildCreateContract($dto->serviceEnum);
 
             $createContract->handle($dto);
-        } catch (CreateExternalOrderException $e) {
+        } catch (CreateExternalOrderException|UnknownDeliveryServiceTypeException $e) {
             $this->logger->critical('Не получается создать заказ по API', [
                 'message' => $e->getMessage(),
                 'orderId' => $dto->external_order_id,
                 'service' => $dto->serviceEnum
             ]);
+
+            throw $e;
         }
     }
 }

@@ -18,7 +18,7 @@ use SmartDelivery\DeliveryService\Raketa\Service\CreateOrderGroupService;
 use SmartDelivery\HttpClients\Raketa\Enums\TransportTypeEnum;
 use SmartDelivery\HttpClients\Raketa\RaketaHttpClientInterface;
 
-final readonly class RaketaOrderContractImpl implements CreateOrderContract
+final readonly class RaketaCreateOrderContractImpl implements CreateOrderContract
 {
     public function __construct(
         private RaketaHttpClientInterface $httpClient,
