@@ -21,7 +21,7 @@ use Throwable;
 final readonly class RaketaHttpClient implements RaketaHttpClientInterface
 {
     private const CREATE_ORDER = '/api-gate/v0/deliveries/groups';
-    private const CANCEL_ORDER = '/api-gate/v0/deliveries/cancel-group/group_id';
+    private const CANCEL_ORDER = '/api-gate/v0/deliveries/cancel-group';
 
     public function __construct(
         private GetAccessTokenService $getAccessTokenService,
@@ -96,25 +96,18 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
 
     public function cancelOrder(int $orderId): void
     {
-        $formParams = [
-            'orders' => [
-                'id' => $orderId
-            ]
-        ];
-
         try {
-            $response = $this->client->request('POST', $this->apiUrl . self::CANCEL_ORDER, [
-                RequestOptions::JSON => $formParams,
+            $response = $this->client->request('POST', $this->apiUrl . self::CANCEL_ORDER . '/' . $orderId, [
                 'headers' => $this->getHeaders()
             ]);
         } catch (GuzzleException $e) {
-            Log::critical('Request params', $formParams);
+            Log::critical('Request params', [$orderId]);
             throw new UnexpectedErrorException($e->getMessage(), 0, $e);
         }
         try {
             $this->validateResponse($response);
         } catch (UnexpectedErrorException $e) {
-            Log::critical('Request params', $formParams);
+            Log::critical('Request params', [$orderId]);
             throw  $e;
         }
 

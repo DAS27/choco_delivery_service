@@ -11,8 +11,7 @@ final class CancelOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'orders' => 'required',
-            'orders.*.id' => 'required|integer',
+            'order_id' => 'required|integer',
             'delivery_service_name' => 'required',
         ];
     }
