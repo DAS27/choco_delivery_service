@@ -119,7 +119,7 @@ final readonly class RaketaHttpClient implements RaketaHttpClientInterface
                 throw new UnexpectedErrorException($responseBodyArr['detail']);
             }
         } catch (Throwable $e) {
-            Log::critical('Request params', $formParams);
+            Log::critical('Request params', [$orderId]);
             throw new UnexpectedErrorException($e->getMessage(), 0, $e);
         }
     }
