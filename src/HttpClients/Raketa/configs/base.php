@@ -3,13 +3,12 @@
 declare(strict_types=1);
 
 return [
+    'token' => env('CHOCO_DOSTAVKA_TOKEN'),
+    'refresh_token' => env('CHOCO_DOSTAVKA_REFRESH_TOKEN'),
     'prod' => [
-        'token' => env('CHOCO_DOSTAVKA_TOKEN'),
         'api_url' => env('CHOCO_DOSTAVKA_API_URL'),
     ],
     'dev' => [
-        'token' => env('CHOCO_DOSTAVKA_DEV_TOKEN'),
-        'refresh_token' => env('CHOCO_DOSTAVKA_DEV_REFRESH_TOKEN'),
         'api_url' => env('CHOCO_DOSTAVKA_DEV_API_URL'),
     ],
 ];
