@@ -9,16 +9,19 @@ use Illuminate\Http\Request;
 use JetBrains\PhpStorm\NoReturn;
 use Psr\Log\LoggerInterface;
 use SmartDelivery\Core\JobDispatcher\JobDispatcherInterface;
+use SmartDelivery\DeliveryService\Main\Enums\DeliveryServiceEnum;
 use SmartDelivery\DeliveryService\Raketa\Enums\OrderStatusEnum;
 use SmartDelivery\DeliveryService\Raketa\UseCases\Impl\RaketaCancelOrderContractImpl;
 use SmartDelivery\DeliveryService\Raketa\UseCases\SendCourierInfoUseCase;
 use SmartDelivery\HttpClients\Raketa\Enums\OrderGroupStatusEnum;
 use SmartDelivery\HttpClients\SmartDeal\Dto\OrderStatusDto;
 use SmartDelivery\Main\Controllers\AbstractController;
+use SmartDelivery\Order\Dto\CancelOrderDto;
 use SmartDelivery\Order\Dto\RequestOrderDto;
 use SmartDelivery\Order\Jobs\CreateOrderJob;
 use SmartDelivery\Order\Requests\CancelOrderRequest;
 use SmartDelivery\Order\Requests\CreateOrderRequest;
+use SmartDelivery\Order\UseCases\CancelOrderUseCase;
 use Throwable;
 
 final class OrderController extends AbstractController
@@ -57,12 +60,15 @@ final class OrderController extends AbstractController
     public function cancelOrder(
         CancelOrderRequest $request,
         LoggerInterface $logger,
-        RaketaCancelOrderContractImpl $raketaCancelOrder
+        CancelOrderUseCase $raketaCancelOrder
     ): JsonResponse {
         $logger->info('[OrderController] Incoming cancel order request', $request->all());
 
         try {
-            $raketaCancelOrder->handle($request->get('order_id'));
+            $raketaCancelOrder->handle(new CancelOrderDto(
+                order_id: (int) $request->get('order_id'),
+                service_name: DeliveryServiceEnum::tryFrom($request->get('delivery_service_name')),
+            ));
         } catch (Throwable $e) {
             $logger->critical(['[OrderController] Failed to cancel order', 'exception' => $e->getMessage()]);
 
@@ -72,7 +78,7 @@ final class OrderController extends AbstractController
         return $this->sendResponse(['message' => 'Ok']);
     }
 
-    #[NoReturn] public function orderStatusHook(
+    public function orderStatusHook(
         Request $request,
         SendCourierInfoUseCase $sendCourierInfoUseCase,
         LoggerInterface $logger

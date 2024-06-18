@@ -13,6 +13,7 @@ final class CancelOrderRequest extends FormRequest
         return [
             'orders' => 'required',
             'orders.*.id' => 'required|integer',
+            'delivery_service_name' => 'required',
         ];
     }
 }

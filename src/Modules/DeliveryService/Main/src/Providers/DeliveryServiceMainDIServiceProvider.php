@@ -6,7 +6,9 @@ namespace SmartDelivery\DeliveryService\Main\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use SmartDelivery\DeliveryService\Main\Factories\DeliveryServiceProviderFactory;
+use SmartDelivery\DeliveryService\Main\UseCase\CancelExternalOrderUseCase;
 use SmartDelivery\DeliveryService\Main\UseCase\CreateExternalOrderUseCase;
+use SmartDelivery\DeliveryService\Main\UseCase\Impl\CancelExternalOrderUseCaseImpl;
 use SmartDelivery\DeliveryService\Main\UseCase\Impl\CreateExternalOrderUseCaseImpl;
 
 final class DeliveryServiceMainDIServiceProvider extends ServiceProvider
@@ -21,5 +23,6 @@ final class DeliveryServiceMainDIServiceProvider extends ServiceProvider
 
         //UseCases
         CreateExternalOrderUseCase::class => CreateExternalOrderUseCaseImpl::class,
+        CancelExternalOrderUseCase::class => CancelExternalOrderUseCaseImpl::class,
     ];
 }

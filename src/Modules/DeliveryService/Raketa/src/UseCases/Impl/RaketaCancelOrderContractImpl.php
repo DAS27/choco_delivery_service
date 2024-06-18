@@ -6,20 +6,21 @@ namespace SmartDelivery\DeliveryService\Raketa\UseCases\Impl;
 
 use SmartDelivery\DeliveryService\Main\Contracts\CancelOrderContract;
 use SmartDelivery\DeliveryService\Main\Enums\DeliveryServiceEnum;
-use SmartDelivery\Order\UseCases\CancelOrderUseCase;
+use SmartDelivery\HttpClients\Raketa\RaketaHttpClientInterface;
+use SmartDelivery\Order\Dto\CancelOrderDto;
 
 final readonly class RaketaCancelOrderContractImpl implements CancelOrderContract
 {
     public function __construct(
-        private CancelOrderUseCase $cancelOrderUseCase
+        private RaketaHttpClientInterface $httpClient,
     ) {}
 
     /**
      * @inheritDoc
      */
-    public function handle(int $orderId): void
+    public function handle(CancelOrderDto $dto): void
     {
-        $this->cancelOrderUseCase->handle($orderId);
+        $this->httpClient->cancelOrder($dto->order_id);
     }
 
     public function getProvider(): DeliveryServiceEnum

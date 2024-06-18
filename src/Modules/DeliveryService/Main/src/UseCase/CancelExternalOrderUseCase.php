@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SmartDelivery\Order\UseCases;
+namespace SmartDelivery\DeliveryService\Main\UseCase;
 
 use SmartDelivery\Order\Dto\CancelOrderDto;
 
-interface CancelOrderUseCase
+interface CancelExternalOrderUseCase
 {
     public function handle(CancelOrderDto $dto): void;
 }
